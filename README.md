@@ -1,2 +1,2 @@
-# bun-zentio
-# bun-zentio
+# Zentio
+Land your dream job with Ai 
