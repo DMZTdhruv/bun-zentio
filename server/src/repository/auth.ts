@@ -53,4 +53,20 @@ export namespace UserRepo {
       await db.select().from(UserTable).where(eq(UserTable.id, id)).limit(1)
     )[0];
   };
+<<<<<<< HEAD
+=======
+
+  export const updatePassword = async (
+    email: string,
+    password: string,
+  ): Promise<Model | undefined> => {
+    return (
+      await db
+        .update(UserTable)
+        .set({ passwordHash: password })
+        .where(eq(UserTable.email, email))
+        .returning()
+    )[0];
+  };
+>>>>>>> dev
 }

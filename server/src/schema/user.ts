@@ -8,4 +8,10 @@ export const userSchema = z.object({
   password: z.string().min(8),
 });
 
+<<<<<<< HEAD
+=======
+export const signInSchema = userSchema.omit({ username: true, name: true });
+
+export type SignInSchema = z.infer<typeof signInSchema>;
+>>>>>>> dev
 export type UserSchema = z.infer<typeof userSchema>;

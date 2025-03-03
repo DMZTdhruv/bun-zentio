@@ -1,7 +1,10 @@
 import { Hono } from "hono";
 import "dotenv/config";
 import { logger } from "hono/logger";
+<<<<<<< HEAD
 import { successResponse } from "./utils/utils";
+=======
+>>>>>>> dev
 import { connectToDb } from "./db";
 import authRoutes from "./routes/auth";
 

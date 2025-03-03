@@ -18,6 +18,11 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.3",
+<<<<<<< HEAD
+=======
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
+>>>>>>> dev
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.0",
     "hono": "^4.7.2",

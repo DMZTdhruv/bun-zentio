@@ -2,12 +2,28 @@ import type { Context } from "hono";
 import type { ErrorResponse, SuccessResponse } from "../schema/response";
 import type { StatusCode } from "hono/utils/http-status";
 import jwt from "jsonwebtoken";
+<<<<<<< HEAD
+=======
+import bcrypt from "bcrypt";
+>>>>>>> dev
 
 const SECRET_KEY = process.env.SECRET_KEY;
 if (!SECRET_KEY) {
   throw new Error("json web token secret key is not defined in .env");
 }
 
+<<<<<<< HEAD
+=======
+export class ZentioError extends Error {
+  status: StatusCode;
+
+  constructor(message: string, status: StatusCode) {
+    super(message);
+    this.status = status;
+  }
+}
+
+>>>>>>> dev
 export const successResponse = ({
   c,
   statusCode,
@@ -47,6 +63,23 @@ export const errorResponse = ({
   return c.json(response);
 };
 
+<<<<<<< HEAD
+=======
+export async function hashPassword(password: string): Promise<string> {
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return hashedPassword;
+}
+
+export async function verifyPasswordHash(
+  hashedPassword: string,
+  password: string,
+): Promise<boolean> {
+  return bcrypt.compare(password, hashedPassword);
+}
+
+>>>>>>> dev
 interface CreateJsonWebTokenInterface {
   username: string;
   name: string;
@@ -56,6 +89,7 @@ interface CreateJsonWebTokenInterface {
 export const createJsonWebToken = (data: CreateJsonWebTokenInterface) => {
   return jwt.sign(data, SECRET_KEY);
 };
+<<<<<<< HEAD
 
 export class ZentioError extends Error {
   status: StatusCode;
@@ -65,3 +99,5 @@ export class ZentioError extends Error {
     this.status = status;
   }
 }
+=======
+>>>>>>> dev
