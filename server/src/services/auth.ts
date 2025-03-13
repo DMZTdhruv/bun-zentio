@@ -1,5 +1,4 @@
 import { UserRepo } from "../repository/auth";
-import bcrypt from "bcrypt";
 import type { SignInSchema, UserSchema } from "../schema/user";
 import {
   createJsonWebToken,
@@ -66,7 +65,7 @@ export const signInUser = async (data: SignInSchema): Promise<AuthReturn> => {
   }
 
   // checking password hash
-  const verified = await verifyPasswordHash(user?.passwordHash, password);
+  const verified = await verifyPasswordHash(user?.password_hash, password);
   console.log(verified);
   if (!verified) {
     throw new ZentioError(`invalid credentials`, 401);
@@ -96,7 +95,7 @@ export const updatePassword = async (data: SignInSchema): Promise<void> => {
   }
 
   // checking password hash
-  const verified = verifyPasswordHash(user?.passwordHash, password);
+  const verified = verifyPasswordHash(user?.password_hash, password);
   if (!verified) {
     throw new ZentioError(`invalid credentials`, 401);
   }

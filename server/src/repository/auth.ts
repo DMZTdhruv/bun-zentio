@@ -16,7 +16,7 @@ export namespace UserRepo {
         .insert(UserTable)
         .values({
           email,
-          passwordHash: password,
+          password_hash: password,
           name,
           username,
         })
@@ -61,7 +61,7 @@ export namespace UserRepo {
     return (
       await db
         .update(UserTable)
-        .set({ passwordHash: password })
+        .set({ password_hash: password })
         .where(eq(UserTable.email, email))
         .returning()
     )[0];
