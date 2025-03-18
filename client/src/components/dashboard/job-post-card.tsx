@@ -2,14 +2,25 @@
 
 import { JobPostSchema } from "~/schema/job-post";
 import { useQueryState } from "nuqs";
+import JobPostBadge from "./job-post-badge";
+import { motion } from "motion/react";
 
 const JobPostCard = (props: JobPostSchema) => {
-  const { job_type, position, title, job_time, company, location, id } = props;
-  const tags = [job_type, position, job_time, location];
+  const { job_type, position, title, company, location, id, job_posting } =
+    props;
+  const tags = [job_type, position, job_posting.company.salary];
+
+  const jobLocation = location ? location : job_posting.company.location;
+  tags.push(jobLocation);
 
   const [, setJobPostId] = useQueryState("job-post");
   return (
-    <div className="bg-job-card group relative isolate h-[190px] rounded-md border border-neutral-800 p-6 transition-all hover:border-neutral-700 hover:bg-neutral-800/50">
+    <motion.div
+      className="bg-job-card group relative isolate h-[190px] rounded-md border border-neutral-800 p-6 transition-all hover:border-neutral-700 hover:bg-neutral-800/50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2, ease: "easeIn" }}
+    >
       <button
         className="absolute inset-0 cursor-pointer"
         onClick={() => {
@@ -22,20 +33,12 @@ const JobPostCard = (props: JobPostSchema) => {
           <small className="text-neutral-400">{company}</small>
         </div>
         <div className="mt-3 flex flex-wrap gap-1">
-          {tags.map((tag) => (
-            <BadgeTag key={tag} title={tag} />
+          {tags.map((tag, index) => (
+            <JobPostBadge key={`${index}_${tag}`} title={tag} />
           ))}
         </div>
       </div>
-    </div>
-  );
-};
-
-const BadgeTag = ({ title }: { title: string | undefined }) => {
-  return (
-    <span className="w-fit rounded-full border bg-neutral-800 px-4 py-1 font-medium group-hover:border-neutral-700">
-      {title}
-    </span>
+    </motion.div>
   );
 };
 

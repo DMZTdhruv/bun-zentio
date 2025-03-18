@@ -23,8 +23,32 @@ import {
 
 import { z } from "zod";
 import { createJobPost } from "~/schema/job-post";
+import { useMutation } from "@tanstack/react-query";
+import { createJobAction } from "~/actions/interview";
+import { toast } from "sonner";
+import { _useAuthStore } from "~/store/user";
 
 const CreateJobPost = () => {
+  const jobTypes = [
+    "frontend",
+    "backend",
+    "fullstack",
+    "mobile",
+    "devops",
+    "machine learning",
+    "cyber security",
+  ];
+  const user = _useAuthStore((state) => state.user);
+
+  const [openDialog, setOpenDiaglog] = useState<boolean>(false);
+  const { isPending, error, mutate } = useMutation({
+    mutationFn: createJobAction,
+    onSuccess: (response) => {
+      toast.success("craeted job post successfully");
+      setOpenDiaglog(false);
+    },
+  });
+
   const [formData, setFormData] = useState({
     company: "",
     description: "",
@@ -69,8 +93,10 @@ const CreateJobPost = () => {
 
   const handleSubmit = () => {
     try {
+      if (!user.username) return;
+      console.log("making api call..");
       const data = createJobPost.parse(formData);
-      console.log(data);
+      console.log(formData);
       setErrors({
         company: "",
         description: "",
@@ -78,9 +104,10 @@ const CreateJobPost = () => {
         position: "",
         title: "",
       });
-
-      console.log("Form submitted:", formData);
-      // Add your form submission logic here
+      mutate({
+        ...data,
+        created_by: user.username,
+      });
     } catch (error) {
       if (error instanceof z.ZodError) {
         // Format and set validation errors
@@ -113,10 +140,17 @@ const CreateJobPost = () => {
     }
   };
 
+  const handleOpenDialog = (value: boolean) => {
+    setOpenDiaglog(value);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={setOpenDiaglog}>
       <DialogTrigger asChild>
-        <Button className="cursor-pointer px-8 py-5 text-base font-semibold">
+        <Button
+          onClick={() => handleOpenDialog(true)}
+          className="cursor-pointer px-8 py-5 text-base font-bold"
+        >
           Create one
         </Button>
       </DialogTrigger>
@@ -168,8 +202,13 @@ const CreateJobPost = () => {
                 />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="frontend">Frontend</SelectItem>
-                <SelectItem value="backend">Backend</SelectItem>
+                {jobTypes.map((type) => {
+                  return (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
             {errors.job_type && (
@@ -235,8 +274,9 @@ const CreateJobPost = () => {
             type="button"
             className="cursor-pointer"
             onClick={handleSubmit}
+            disabled={isPending}
           >
-            Save changes
+            {isPending ? "Creating..." : "Create"}
           </Button>
         </DialogFooter>
       </DialogContent>

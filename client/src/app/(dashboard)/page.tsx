@@ -6,7 +6,7 @@ import { Input } from "~/components/ui/input";
 
 export default function Home() {
   return (
-    <div className="relative">
+    <div className="relative h-dvh">
       <div className="mx-auto max-w-7xl px-8 pt-10 pb-[100px]">
         <header>
           <h2 className="text-4xl font-semibold capitalize">
@@ -31,10 +31,6 @@ export default function Home() {
         <section className="mt-14 w-full">
           <div>
             <header className="font-medium">Created By You</header>
-            <JobPosting />
-          </div>
-          <div className="mt-8">
-            <header className="font-medium">Created By Community</header>
             <JobPosting />
           </div>
         </section>

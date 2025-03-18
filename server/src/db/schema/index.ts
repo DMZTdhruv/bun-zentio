@@ -23,7 +23,17 @@ export const JobPost = pgTable("job_posts", {
    id: uuid("id").primaryKey().defaultRandom(),
    description: text("description").notNull(),
    company: text("company").notNull(),
-   job_type: text("job_type", { enum: ["frontend", "backend"] }).notNull(),
+   job_type: text("job_type", {
+      enum: [
+         "frontend",
+         "backend",
+         "fullstack",
+         "mobile",
+         "devops",
+         "machine learning",
+         "cyber security",
+      ],
+   }).notNull(),
    position: text("position", { enum: ["senior", "mid", "junior"] }).notNull(),
    location: text("location").default("sf"),
    public: boolean("public").notNull().default(true),

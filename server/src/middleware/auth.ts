@@ -9,9 +9,8 @@ interface Env {
 
 export const authenticatedAuthToken = createMiddleware<Env>(async (c, next) => {
    const authToken = getCookie(c, "auth");
-
+   console.log({ authToken });
    if (!authToken) {
-      console.log("yes bro...");
       return errorResponse({
          c,
          message: "unauthorized user",

@@ -12,8 +12,12 @@
 @theme {
   --color-background: #0d0d0d;
   --color-job-card: #181818;
+  --color-right-side-panel: #191919;
 }
 
+.markdown > * {
+  all: revert;
+}
 ::-webkit-scrollbar {
   width: 0px;
 }
