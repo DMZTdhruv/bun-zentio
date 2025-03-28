@@ -25,7 +25,7 @@ export default function MarkdownRenderer({ mdFormat }: { mdFormat: string }) {
                     }}
                     language={match[1]}
                     PreTag="div"
-                    className="rounded-md text-xs"
+                    className="rounded-md !text-xs"
                     wrapLines={true}
                     wrapLongLines={true}
                   >

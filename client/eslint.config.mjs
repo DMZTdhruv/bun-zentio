@@ -11,6 +11,13 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    ignores: [
+      "src/components/plate-ui/*",
+      "src/components/editor/*",
+      "src/lib/uploadthing.ts",
+    ],
+  },
 ];
 
 export default eslintConfig;
