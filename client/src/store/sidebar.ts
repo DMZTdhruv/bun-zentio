@@ -10,7 +10,7 @@ interface SidebarStore {
 
 export const _useSidebarStore = create<SidebarStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       openSidebar: false,
       toggleSidebar: (value) => {
         set({ openSidebar: value });

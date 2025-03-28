@@ -6,7 +6,7 @@ import {
   PanelRight,
   Plus,
   TerminalIcon,
-  X,
+  // X,
 } from "lucide-react";
 import {
   Select,
@@ -18,7 +18,6 @@ import {
 } from "~/components/ui/select";
 
 import type { Ace } from "ace-builds";
-import ReactMarkdown from "react-markdown";
 
 import "ace-builds/src-min-noconflict/ace";
 import AceEditor from "react-ace";
@@ -156,8 +155,9 @@ import { LangaugeSchema } from "~/schema/language";
 import { languages } from "~/config/language";
 import { handleToggleSidebar } from "~/store/sidebar";
 import { Textarea } from "~/components/ui/textarea";
+import MarkdownRenderer from "~/components/playground/markdown-renderer";
 
-const Playground = ({ params }: { params: { id: string } }) => {
+const Playground = () => {
   useEffect(() => {
     handleToggleSidebar(true);
   }, []);
@@ -318,11 +318,7 @@ Output: [0,1]
 Can you come up with an algorithm that runs in **O(n)** time complexity?
 `;
 
-  return (
-    <div className="prose prose-invert prose-pre:p-0 prose-pre:bg-transparent col-span-3 max-w-none">
-      <ReactMarkdown className="markdown">{mdFormat}</ReactMarkdown>
-    </div>
-  );
+  return <MarkdownRenderer mdFormat={mdFormat} />;
 };
 const CodingPanel = () => {
   return (

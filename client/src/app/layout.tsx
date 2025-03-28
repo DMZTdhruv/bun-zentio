@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 import { ReactQueryProvider } from "~/providers/react-query";
@@ -21,19 +22,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${satoshiFont.variable} dark antialiased`}>
-        <NuqsAdapter>
-          <ReactQueryProvider>
-            <div className="font-satoshi flex bg-black">
-              <SideBar />
-              <Wrapper>
-                <ScrollArea className="max-h-screen overflow-y-auto rounded-md">
-                  {children}
-                </ScrollArea>
-              </Wrapper>
-            </div>
-            <Toaster />
-          </ReactQueryProvider>
-        </NuqsAdapter>
+        <ReactQueryProvider>
+          <div className="font-satoshi flex bg-black">
+            <NuqsAdapter>
+              <Suspense fallback={<div>Loading...</div>}>
+                <SideBar />
+                <Wrapper>
+                  <ScrollArea className="max-h-screen overflow-y-auto rounded-md">
+                    {children}
+                  </ScrollArea>
+                </Wrapper>
+              </Suspense>
+            </NuqsAdapter>
+          </div>
+          <Toaster />
+        </ReactQueryProvider>
       </body>
     </html>
   );

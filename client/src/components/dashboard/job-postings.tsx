@@ -1,12 +1,12 @@
 "use client";
 
-import { _useJobPostStore, getJobPosts } from "~/store/job-post";
+import { _useJobPostStore } from "~/store/job-post";
 import JobPostCard from "./job-post-card";
 import { useQuery } from "@tanstack/react-query";
 import { getJobPostsQueryOptions } from "~/actions/interview/query-options";
 
 const JobPosting = () => {
-  const { isPending, error } = useQuery(getJobPostsQueryOptions);
+  const { isPending } = useQuery(getJobPostsQueryOptions);
   const jobPosts = _useJobPostStore((state) => state.jobPosts.reverse());
   return (
     <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">

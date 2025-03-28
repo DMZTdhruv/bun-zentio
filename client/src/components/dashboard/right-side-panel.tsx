@@ -58,17 +58,17 @@ const RightSidePanel = () => {
               className={`fixed top-0 right-0 bottom-0 z-50 w-1/2 bg-[#171717] shadow-lg`}
             >
               <div className="relative inset-0">
-                {/* {pathName !== "/playground" && ( */}
-                {/*   <button */}
-                {/*     onClick={() => setJobPostId(null)} */}
-                {/*     className="bg-right-side-panel/30 group absolute top-6 left-6 z-50 cursor-pointer rounded-md p-2 text-neutral-300 backdrop-blur-xl hover:text-white" */}
-                {/*   > */}
-                {/*     <PanelRight */}
-                {/*       size={24} */}
-                {/*       className="transition-all group-active:scale-75" */}
-                {/*     /> */}
-                {/*   </button> */}
-                {/* )} */}
+                {pathName !== "/playground" && (
+                  <button
+                    onClick={() => setJobPostId(null)}
+                    className="bg-right-side-panel/30 group absolute top-6 left-6 z-50 cursor-pointer rounded-md p-2 text-neutral-300 backdrop-blur-xl hover:text-white"
+                  >
+                    <PanelRight
+                      size={24}
+                      className="transition-all group-active:scale-75"
+                    />
+                  </button>
+                )}
                 {selectedJob.job_posting && (
                   <JobPostingDetails
                     data={selectedJob.job_posting}
@@ -149,7 +149,7 @@ export default RightSidePanel;
 
 const DeleteButton = ({ id }: { id: string }) => {
   const [, setJobPostId] = useQueryState("job-post");
-  const { isPending, error, mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: deleteJobPostAction,
     onError: (error) => {
       toast.error(error.message);

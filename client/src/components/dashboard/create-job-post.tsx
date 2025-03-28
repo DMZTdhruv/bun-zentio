@@ -41,9 +41,9 @@ const CreateJobPost = () => {
   const user = _useAuthStore((state) => state.user);
 
   const [openDialog, setOpenDiaglog] = useState<boolean>(false);
-  const { isPending, error, mutate } = useMutation({
+  const { isPending, mutate } = useMutation({
     mutationFn: createJobAction,
-    onSuccess: (response) => {
+    onSuccess: () => {
       toast.success("craeted job post successfully");
       setOpenDiaglog(false);
     },
