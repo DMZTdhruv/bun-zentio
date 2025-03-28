@@ -10,12 +10,19 @@ import { useCreateEditor } from "~/components/editor/use-create-editor";
 import { SettingsDialog } from "~/components/editor/settings";
 import { Editor, EditorContainer } from "~/components/plate-ui/editor";
 
-export function PlateEditor() {
-  const editor = useCreateEditor();
+export function PlateEditor({ value }: { value?: any[] }) {
+  const editor = useCreateEditor({
+    value: value,
+  });
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Plate editor={editor}>
+      <Plate
+        editor={editor}
+        onChange={(value) => {
+          console.log(value);
+        }}
+      >
         <EditorContainer>
           <Editor
             variant="demo"

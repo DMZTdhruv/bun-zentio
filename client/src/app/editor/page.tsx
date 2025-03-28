@@ -1,7 +1,13 @@
-import { Toaster } from "sonner";
+"use client";
+import dynamic from "next/dynamic";
 
-import { PlateEditor } from "~/components/editor/plate-editor";
-import { SettingsProvider } from "~/components/editor/settings";
+const LazyZentioEditor = dynamic(
+  () => import("~/components/editor/pl-editor"),
+  {
+    ssr: false,
+    loading: () => <div>loading..</div>,
+  },
+);
 
 export default function Page() {
   return (
@@ -9,11 +15,7 @@ export default function Page() {
       className="max-h-screen w-full overflow-y-scroll caret-white"
       data-registry="plate"
     >
-      <SettingsProvider>
-        <PlateEditor />
-      </SettingsProvider>
-
-      <Toaster />
+      <LazyZentioEditor />
     </div>
   );
 }

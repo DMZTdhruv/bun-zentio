@@ -9,7 +9,7 @@ const JobPosting = () => {
   const { isPending } = useQuery(getJobPostsQueryOptions);
   const jobPosts = _useJobPostStore((state) => state.jobPosts.reverse());
   return (
-    <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+    <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
       {isPending
         ? [1, 2, 3, 4].map((value) => {
             return (

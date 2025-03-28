@@ -161,11 +161,13 @@ export const useCreateEditor = (
     components,
     override,
     readOnly,
+    value,
     ...options
   }: {
     components?: Record<string, any>;
     plugins?: any[];
     readOnly?: boolean;
+    value?: any[];
   } & Omit<CreatePlateEditorOptions, "plugins"> = {},
   deps: any[] = [],
 ) => {
@@ -184,7 +186,7 @@ export const useCreateEditor = (
         FixedToolbarPlugin,
         FloatingToolbarPlugin,
       ],
-      value: [
+      value: value ?? [
         {
           children: [{ text: "Playground" }],
           type: "h1",

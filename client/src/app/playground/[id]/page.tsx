@@ -8,6 +8,7 @@ import {
   TerminalIcon,
   // X,
 } from "lucide-react";
+import { useQueryState } from "nuqs";
 import {
   Select,
   SelectContent,
@@ -156,6 +157,7 @@ import { languages } from "~/config/language";
 import { handleToggleSidebar } from "~/store/sidebar";
 import { Textarea } from "~/components/ui/textarea";
 import MarkdownRenderer from "~/components/playground/markdown-renderer";
+import PlaygroundNotesPanel from "~/components/playground/playground-notes-panel";
 
 const Playground = () => {
   useEffect(() => {
@@ -169,10 +171,12 @@ const Playground = () => {
         <CodingPanel />
         <AiPanel />
       </div>
+      <PlaygroundNotesPanel />
     </div>
   );
 };
 const PlaygroundHeader = () => {
+  const [, setNoteId] = useQueryState("note");
   return (
     <header className="text-md flex items-center justify-between py-4 font-semibold">
       <div className="flex items-center gap-2">
@@ -197,10 +201,15 @@ const PlaygroundHeader = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+      <button
+        onClick={() => {
+          setNoteId("1");
+        }}
+        className="flex items-center gap-2"
+      >
         <PanelRight className="size-4" />
         Notes
-      </div>
+      </button>
     </header>
   );
 };

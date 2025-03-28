@@ -55,7 +55,7 @@ const RightSidePanel = () => {
                 duration: 0.3,
                 ease: [0.76, 0, 0.24, 1],
               }}
-              className={`fixed top-0 right-0 bottom-0 z-50 w-1/2 bg-[#171717] shadow-lg`}
+              className={`fixed top-0 right-0 bottom-0 z-50 w-full bg-[#171717] shadow-lg lg:w-1/2`}
             >
               <div className="relative inset-0">
                 {pathName !== "/playground" && (
