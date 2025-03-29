@@ -296,36 +296,8 @@ const PlaygroundJudge = () => {
 };
 
 const QuestionPanel = () => {
-  const mdFormat = `
-# Two Sum
-## Problem Statement
-Given an array of integers \`nums\` and an integer \`target\`, return the indices of the two numbers such that they add up to \`target\`.
-You may assume that each input would have **exactly one solution**, and you **may not use the same element twice**.
-You can return the answer in **any order**.
-## Example 1
-\`\`\`plaintext
-Input: nums = [2,7,11,15], target = 9
-Output: [0,1]
-Explanation: nums[0] + nums[1] == 9, so we return [0, 1].
-\`\`\`
-## Example 2
-\`\`\`plaintext
-Input: nums = [3,2,4], target = 6
-Output: [1,2]
-\`\`\`
-## Example 3
-\`\`\`plaintext
-Input: nums = [3,3], target = 6
-Output: [0,1]
-\`\`\`
-## Constraints
-- \( 2 \leq \) \`nums.length\` \( \leq 10^4 \)
-- \( -10^9 \leq \) \`nums[i]\` \( \leq 10^9 \)
-- \( -10^9 \leq \) \`target\` \( \leq 10^9 \)
-- **Only one valid answer exists.**
-## Follow-up
-Can you come up with an algorithm that runs in **O(n)** time complexity?
-`;
+  const mdFormat =
+    "# Valid Parentheses\n## Problem Statement\nGiven a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.\nAn input string is valid if:\n1. Open brackets must be closed by the same type of brackets.\n2. Open brackets must be closed in the correct order.\n3. Note that an empty string is also considered valid.\n## Example 1\n```plaintext\nInput: s = \"()\"\nOutput: true\n```\n## Example 2\n```plaintext\nInput: s = \"()[]{}\"\nOutput: true\n```\n## Example 3\n```plaintext\nInput: s = \"(]\"\nOutput: false\n```\n## Constraints\n- `1 <= s.length <= 10^4`\n- `s` consists of parentheses only `'()[]{}'`.\n";
 
   return <MarkdownRenderer mdFormat={mdFormat} />;
 };

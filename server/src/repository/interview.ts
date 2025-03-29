@@ -1,12 +1,18 @@
 import { and, eq, type InferSelectModel } from "drizzle-orm";
 import { db } from "../db";
-import { JobPost } from "../db/schema";
-import { jobPostingSchema, type JobPostCreation } from "../schema/interview";
+import { JobInterview, JobPost } from "../db/schema";
+import {
+   jobPostingSchema,
+   type JobInterviewQuestionsCreation,
+   type JobPostCreation,
+} from "../schema/interview";
 import { AiRepo } from "./ai";
 import { locations, techCompanies, ZentioError } from "../utils/utils";
+import type { GenerateLeetCodeQuestionsWithGeminiSchema } from "../schema/ai";
 
 export namespace InterviewRepo {
    export type Model = InferSelectModel<typeof JobPost>;
+   export type JobInterviewModel = InferSelectModel<typeof JobInterview>;
 
    export async function createAiMockInterviewJobPost(
       username: string,
@@ -95,6 +101,32 @@ export namespace InterviewRepo {
          await db
             .delete(JobPost)
             .where(and(eq(JobPost.id, id), eq(JobPost.created_by, username)))
+            .returning()
+      )[0];
+   };
+
+   export const generateQuestionForJobPost = async (
+      username: string,
+      postId: string,
+      { position, job_type }: GenerateLeetCodeQuestionsWithGeminiSchema,
+   ): Promise<JobInterviewModel | undefined> => {
+      const questions = await AiRepo.generateLeetCodeQuestionsWithGemini({
+         job_type,
+         position,
+      });
+
+      if (!questions || !questions.length) {
+         throw new ZentioError("failed to generate the questions", 404);
+      }
+
+      return (
+         await db
+            .insert(JobInterview)
+            .values({
+               questions: questions,
+               created_by: username,
+               job_post_id: postId,
+            })
             .returning()
       )[0];
    };

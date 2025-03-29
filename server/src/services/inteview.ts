@@ -3,7 +3,10 @@ import { UserRepo } from "../repository/auth";
 import { InterviewRepo } from "../repository/interview";
 import { ZentioError } from "../utils/utils";
 import type { JobPost } from "../db/schema";
-import type { JobPostCreation } from "../schema/interview";
+import type {
+   JobInterviewQuestionsCreation,
+   JobPostCreation,
+} from "../schema/interview";
 
 type Model = InferSelectModel<typeof JobPost>;
 
@@ -84,4 +87,38 @@ export const getJobPostByIdService = async (
    }
 
    return res;
+};
+
+export const generateJobPostQuestionsById = async (
+   username: string,
+   postId: string,
+): Promise<string[]> => {
+   const userExists = await UserRepo.getUserByUsername(username);
+   if (!userExists) {
+      throw new ZentioError(`no account is registered with this email`, 404);
+   }
+
+   const res = await InterviewRepo.getJobPostById(username, postId);
+
+   if (!res) {
+      throw new ZentioError(
+         `failed to fetch a job post with the id ${postId}`,
+         400,
+      );
+   }
+
+   const response = await InterviewRepo.generateQuestionForJobPost(
+      username,
+      postId,
+      {
+         job_type: res.job_type,
+         position: res.position,
+      },
+   );
+
+   if (!response) {
+      throw new ZentioError(`failed to create job questions ${postId}`, 400);
+   }
+
+   return response.questions;
 };

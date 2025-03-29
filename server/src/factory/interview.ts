@@ -1,6 +1,7 @@
 import { createFactory } from "hono/factory";
 import { authenticatedAuthToken } from "../middleware/auth";
 import {
+   createJobInterviewQuestionsCreation,
    createJobPostValidator,
    deleteJobPostValidator,
 } from "../validators/interview";
@@ -8,6 +9,7 @@ import { errorResponse, successResponse, ZentioError } from "../utils/utils";
 import {
    createJobPostService,
    deleteJobPostService,
+   generateJobPostQuestionsById,
    getJobPostByIdService,
    getUserJobPostService,
 } from "../services/inteview";
@@ -125,6 +127,46 @@ export const getJobPostByIdHandler = factory.createHandlers(
          return successResponse({
             c,
             message: "successfully deleted an ai mock interview job post",
+            data: res,
+            statusCode: 200,
+         });
+      } catch (error) {
+         console.log(`Error fetching job post`, error);
+         if (error instanceof ZentioError) {
+            return errorResponse({
+               c,
+               statusCode: error.status,
+               message: error.message,
+            });
+         }
+         return errorResponse({
+            c,
+            statusCode: 500,
+            message: "internal server error",
+         });
+      }
+   },
+);
+
+export const generateInterviewQuestions = factory.createHandlers(
+   createJobInterviewQuestionsCreation,
+   authenticatedAuthToken,
+   async (c) => {
+      try {
+         const user = c.get("auth_user");
+         const jobPostId = c.req.param("id");
+
+         if (!jobPostId) {
+            throw new ZentioError("job post id is not provided", 400);
+         }
+
+         const res = await generateJobPostQuestionsById(
+            user.username,
+            jobPostId,
+         );
+         return successResponse({
+            c,
+            message: "successfully generated questions",
             data: res,
             statusCode: 200,
          });

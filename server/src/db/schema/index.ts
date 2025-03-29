@@ -47,3 +47,28 @@ export const JobPost = pgTable("job_posts", {
    created_at: timestamp("created_at").defaultNow().notNull(),
    updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const JobInterview = pgTable("job_interview", {
+   id: uuid("id").primaryKey().defaultRandom(),
+   questions: text("questions").array().notNull().default([]),
+   job_post_id: varchar("job_post_id")
+      .notNull()
+      .references(() => JobPost.id, { onDelete: "cascade" }),
+   created_by: varchar("created_by")
+      .notNull()
+      .references(() => UserTable.username),
+   created_at: timestamp("created_at").defaultNow().notNull(),
+   updated_at: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// fetch this data by using the jobinterview id and the username
+export const InterviewSubmission = pgTable("interview_submission", {
+   id: uuid("id").primaryKey().defaultRandom(),
+   solutions: text("solutions").array(),
+   submitted_by: varchar("submitted_by")
+      .notNull()
+      .references(() => UserTable.username),
+   job_interview_id: varchar("job_interview_id")
+      .notNull()
+      .references(() => JobInterview.id, { onDelete: "cascade" }),
+});

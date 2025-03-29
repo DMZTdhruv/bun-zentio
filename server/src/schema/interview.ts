@@ -44,9 +44,17 @@ export const jobPostCreation = jobPostSchema.omit({
    job_posting: true,
 });
 
+export const jobInterviewQuestionsCreation = z.object({
+   postId: z.string(),
+   job_type: z.string(),
+});
+
 export const deleteJobPostRequest = z.object({
    id: z.string(),
 });
 
 export type JobPostSchema = z.infer<typeof jobPostSchema>;
 export type JobPostCreation = z.infer<typeof jobPostCreation>;
+export type JobInterviewQuestionsCreation = z.infer<
+   typeof jobInterviewQuestionsCreation
+>;
