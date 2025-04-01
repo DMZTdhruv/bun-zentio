@@ -1,6 +1,6 @@
 "use client";
 
-import { JobPostSchema } from "~/schema/job-post";
+import { JobPostSchema } from "~/schema/job";
 import { useQueryState } from "nuqs";
 import JobPostBadge from "./job-post-badge";
 import { motion } from "motion/react";

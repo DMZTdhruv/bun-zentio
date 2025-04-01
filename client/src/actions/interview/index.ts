@@ -1,5 +1,10 @@
 import apiClient, { SuccessResponse } from "~/lib/api-client";
-import { CreateJobPost, JobPostSchema } from "~/schema/job-post";
+import {
+  CreateJobPost,
+  JobInterviewResponse,
+  jobInterviewResponse,
+  JobPostSchema,
+} from "~/schema/job";
 import {
   addJobPost,
   deleteJobPost,
@@ -53,3 +58,15 @@ export const getJobById = async (id: string) =>
       withCredentials: true,
     })
     .then((res) => res.data.data);
+
+export const getJobInterview = async (id: string) =>
+  apiClient
+    .get<SuccessResponse<JobInterviewResponse>>(
+      `interview/job-interview/${id}`,
+      {
+        withCredentials: true,
+      },
+    )
+    .then((res) => {
+      return res.data.data;
+    });

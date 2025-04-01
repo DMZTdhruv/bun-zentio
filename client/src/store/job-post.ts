@@ -1,6 +1,8 @@
 "use client";
 import { create } from "zustand";
-import { JobPostSchema } from "~/schema/job-post";
+import { JobPostSchema } from "~/schema/job";
+import { createStore } from "zustand";
+import { createSelectors } from "./selector";
 
 interface JobPostStore {
   jobPosts: JobPostSchema[];
@@ -27,4 +29,4 @@ export const addJobPost = _useJobPostStore.getState().addJobPost;
 export const deleteJobPost = _useJobPostStore.getState().deleteJobPost;
 export const getJobPosts = () => _useJobPostStore.getState().jobPosts;
 
-export default _useJobPostStore;
+export const useJobPosts = createSelectors(_useJobPostStore);

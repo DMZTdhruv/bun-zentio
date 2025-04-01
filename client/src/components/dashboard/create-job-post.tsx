@@ -22,11 +22,12 @@ import {
 } from "../ui/select";
 
 import { z } from "zod";
-import { createJobPost } from "~/schema/job-post";
+import { createJobPost } from "~/schema/job";
 import { useMutation } from "@tanstack/react-query";
 import { createJobAction } from "~/actions/interview";
 import { toast } from "sonner";
 import { _useAuthStore } from "~/store/user";
+import { motion, AnimatePresence } from "motion/react";
 
 const CreateJobPost = () => {
   const jobTypes = [
@@ -110,7 +111,6 @@ const CreateJobPost = () => {
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        // Format and set validation errors
         const newErrors = {
           company: "",
           description: "",
@@ -154,12 +154,12 @@ const CreateJobPost = () => {
           Create one
         </Button>
       </DialogTrigger>
-      <DialogContent className="pt-8 sm:max-w-[455px]">
+      <DialogContent className="bg-neutral-950/40 pt-8 backdrop-blur-3xl sm:max-w-[455px]">
         <DialogHeader className="py-4">
-          <DialogTitle className="text-center text-2xl">
-            Create an AI based mock interview
+          <DialogTitle className="text-center text-2xl leading-[1.2] tracking-tighter">
+            Create AI Interview
           </DialogTitle>
-          <DialogDescription className="mx-auto max-w-sm text-center">
+          <DialogDescription className="mx-auto max-w-sm text-center leading-[1.2]">
             Practice solving AI generated interview problems based on the job
             context and level{" "}
           </DialogDescription>
@@ -168,7 +168,7 @@ const CreateJobPost = () => {
           <div>
             <Input
               name="company"
-              className="bg-neutral-900"
+              className="dark:bg-input/30 dark:hover:bg-input/50"
               placeholder="Enter a company name"
               value={formData.company}
               onChange={handleChange}
@@ -181,7 +181,7 @@ const CreateJobPost = () => {
           <div>
             <Textarea
               name="description"
-              className="bg-neutral-900"
+              className="dark:bg-input/30 dark:hover:bg-input/50"
               placeholder="Enter this job description"
               value={formData.description}
               onChange={handleChange}
@@ -241,7 +241,7 @@ const CreateJobPost = () => {
 
           <Input
             name="location"
-            className="bg-neutral-900"
+            className="dark:bg-input/30 dark:hover:bg-input/50"
             placeholder="Enter a location"
             value={formData.location}
             onChange={handleChange}
@@ -250,7 +250,7 @@ const CreateJobPost = () => {
           <div>
             <Input
               name="title"
-              className="bg-neutral-900"
+              className="dark:bg-input/30 dark:hover:bg-input/50"
               placeholder="Enter a title cause why not"
               value={formData.title}
               onChange={handleChange}
@@ -272,11 +272,31 @@ const CreateJobPost = () => {
           </div>
           <Button
             type="button"
-            className="cursor-pointer"
+            className="cursor-pointer font-medium tracking-tight"
             onClick={handleSubmit}
             disabled={isPending}
           >
-            {isPending ? "Creating..." : "Create"}
+            <AnimatePresence mode="wait">
+              {isPending ? (
+                <motion.span
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="pt-1"
+                >
+                  Creating...
+                </motion.span>
+              ) : (
+                <motion.span
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="pt-1"
+                >
+                  Create
+                </motion.span>
+              )}
+            </AnimatePresence>
           </Button>
         </DialogFooter>
       </DialogContent>

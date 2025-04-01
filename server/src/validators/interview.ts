@@ -3,7 +3,7 @@ import {
    deleteJobPostRequest,
    jobInterviewQuestionsCreation,
    jobPostCreation,
-} from "../schema/interview";
+} from "../schema/job";
 import { errorResponse } from "../utils/utils";
 
 export const createJobPostValidator = zValidator(

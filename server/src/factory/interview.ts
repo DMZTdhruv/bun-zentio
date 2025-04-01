@@ -1,119 +1,16 @@
 import { createFactory } from "hono/factory";
 import { authenticatedAuthToken } from "../middleware/auth";
-import {
-   createJobInterviewQuestionsCreation,
-   createJobPostValidator,
-   deleteJobPostValidator,
-} from "../validators/interview";
+import { createJobInterviewQuestionsCreation } from "../validators/interview";
 import { errorResponse, successResponse, ZentioError } from "../utils/utils";
 import {
-   createJobPostService,
-   deleteJobPostService,
    generateJobPostQuestionsById,
-   getJobPostByIdService,
-   getUserJobPostService,
+   getJobInterviewService,
 } from "../services/inteview";
 
 const factory = createFactory();
 
-export const createJobPostHandler = factory.createHandlers(
-   createJobPostValidator,
-   authenticatedAuthToken,
-   async (c) => {
-      const user = c.get("auth_user");
-      const data = c.req.valid("json");
-      console.log({ user });
-      console.log({
-         data,
-      });
-
-      if (data.created_by !== user.username) {
-         return errorResponse({
-            c,
-            message: "unauthorized user",
-            statusCode: 404,
-         });
-      }
-
-      const res = await createJobPostService(data, user.username);
-      return successResponse({
-         c,
-         message: "successfully created an ai mock interview job post",
-         data: res,
-         statusCode: 201,
-      });
-   },
-);
-
-export const getUserJobPostHandler = factory.createHandlers(
-   authenticatedAuthToken,
-   async (c) => {
-      try {
-         const user = c.get("auth_user");
-         const res = await getUserJobPostService(user.username);
-         console.log({ res });
-         return successResponse({
-            c,
-            message: "successfully created an ai mock interview job post",
-            data: res,
-            statusCode: 201,
-         });
-      } catch (error) {
-         console.log("Error fetching user job posts", error);
-         if (error instanceof ZentioError) {
-            return errorResponse({
-               c,
-               statusCode: error.status,
-               message: error.message,
-            });
-         }
-         return errorResponse({
-            c,
-            statusCode: 500,
-            message: "internal server error",
-         });
-      }
-   },
-);
-
-export const deleteJobPostHandler = factory.createHandlers(
-   authenticatedAuthToken,
-   async (c) => {
-      try {
-         const user = c.get("auth_user");
-         const jobPostId = c.req.param("id");
-         console.log({
-            jobPostId,
-         });
-         if (!jobPostId) {
-            throw new ZentioError("job post id is not sent", 400);
-         }
-         const res = await deleteJobPostService(user.username, jobPostId);
-         return successResponse({
-            c,
-            message: "successfully deleted an ai mock interview job post",
-            data: res,
-            statusCode: 200,
-         });
-      } catch (error) {
-         console.log("Error fetching user job posts", error);
-         if (error instanceof ZentioError) {
-            return errorResponse({
-               c,
-               statusCode: error.status,
-               message: error.message,
-            });
-         }
-         return errorResponse({
-            c,
-            statusCode: 500,
-            message: "internal server error",
-         });
-      }
-   },
-);
-
-export const getJobPostByIdHandler = factory.createHandlers(
+export const createInterviewQuestionForJobHandler = factory.createHandlers(
+   createJobInterviewQuestionsCreation,
    authenticatedAuthToken,
    async (c) => {
       try {
@@ -123,10 +20,11 @@ export const getJobPostByIdHandler = factory.createHandlers(
          if (!jobPostId) {
             throw new ZentioError("job post id is not provided", 400);
          }
-         const res = await getJobPostByIdService(user.username, jobPostId);
+
+         const res = await generateJobPostQuestionsById(user.id, jobPostId);
          return successResponse({
             c,
-            message: "successfully deleted an ai mock interview job post",
+            message: "successfully generated questions",
             data: res,
             statusCode: 200,
          });
@@ -148,8 +46,7 @@ export const getJobPostByIdHandler = factory.createHandlers(
    },
 );
 
-export const generateInterviewQuestions = factory.createHandlers(
-   createJobInterviewQuestionsCreation,
+export const getJobInterviewHandler = factory.createHandlers(
    authenticatedAuthToken,
    async (c) => {
       try {
@@ -157,16 +54,13 @@ export const generateInterviewQuestions = factory.createHandlers(
          const jobPostId = c.req.param("id");
 
          if (!jobPostId) {
-            throw new ZentioError("job post id is not provided", 400);
+            throw new ZentioError("job interview is not available", 400);
          }
 
-         const res = await generateJobPostQuestionsById(
-            user.username,
-            jobPostId,
-         );
+         const res = await getJobInterviewService(user.id, jobPostId);
          return successResponse({
             c,
-            message: "successfully generated questions",
+            message: "successfully fetched job interview",
             data: res,
             statusCode: 200,
          });

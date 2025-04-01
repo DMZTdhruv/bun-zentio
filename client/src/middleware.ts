@@ -5,8 +5,12 @@ export async function middleware(request: NextRequest) {
   const authCookie = request.cookies.get("auth");
   console.log(authCookie?.value);
 
-  // For unauthenticated users, redirect to /sign-in, but ONLY if they're not already going there
-  if (!authCookie?.value && !request.nextUrl.pathname.startsWith("/sign-in")) {
+  // For unauthenticated users, redirect to /sign-in, but exclude /sign-in and /sign-up routes
+  if (
+    !authCookie?.value &&
+    !request.nextUrl.pathname.startsWith("/sign-in") &&
+    !request.nextUrl.pathname.startsWith("/sign-up")
+  ) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 

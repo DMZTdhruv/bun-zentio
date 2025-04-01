@@ -64,6 +64,68 @@ export const createJobPost = z.object({
   title: z.string().nullable(),
 });
 
+const HeaderSectionSchema = z.object({
+  type: z.literal("header"),
+  title: z.string(),
+  description: z.string(),
+});
+
+const ExampleSchema = z.object({
+  number: z.string(),
+  inputs: z.string(),
+  output: z.string(),
+});
+
+const ExamplesSectionSchema = z.object({
+  type: z.literal("examples"),
+  examples: z.array(ExampleSchema),
+});
+
+const ConstraintsSectionSchema = z.object({
+  type: z.literal("constraints"),
+  constraints: z.array(z.string()),
+});
+
+const AdditionalInfoSectionSchema = z.object({
+  type: z.literal("additional_information"),
+  description: z.string(),
+});
+
+const SectionSchema = z.union([
+  HeaderSectionSchema,
+  ExamplesSectionSchema,
+  ConstraintsSectionSchema,
+  AdditionalInfoSectionSchema,
+]);
+
+export const QuestionSchema = z.object({
+  type: z.literal("problem"),
+  sections: z.array(SectionSchema),
+});
+
+export const jobInterview = z.object({
+  id: z.string(),
+  questions: z.array(QuestionSchema),
+  job_post_id: z.string(),
+  created_by: z.string(),
+  created_at: z.date(),
+  updated_at: z.date(),
+});
+
+export const jobInterviewResponse = z.object({
+  interview: jobInterview,
+  job_post: jobPostSchema.pick({
+    id: true,
+    job_type: true,
+    title: true,
+  }),
+});
+
+export type AdditionalInfoSection = {
+  type: "additional_information";
+  description: string;
+};
 export type JobPostSchema = z.infer<typeof jobPostSchema>;
 export type CreateJobPost = z.infer<typeof createJobPost>;
 export type JobPostingSchema = z.infer<typeof jobPostingSchema>;
+export type JobInterviewResponse = z.infer<typeof jobInterviewResponse>;

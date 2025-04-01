@@ -1,9 +1,8 @@
 import { createFactory } from "hono/factory";
 import { signUpValidator, signInValidator } from "../validators/auth";
 import { updatePassword, createUser, signInUser } from "../services/auth";
-import { setCookie, setSignedCookie } from "hono/cookie";
+import { setCookie } from "hono/cookie";
 import { errorResponse, successResponse, ZentioError } from "../utils/utils";
-import { authenticatedAuthToken } from "../middleware/auth";
 
 const factory = createFactory();
 

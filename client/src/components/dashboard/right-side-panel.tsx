@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { _useJobPostStore } from "~/store/job-post";
 import { Button } from "../ui/button";
 import { useQueryState } from "nuqs";
-import { JobPostingSchema } from "~/schema/job-post";
+import { JobPostingSchema } from "~/schema/job";
 import { Separator } from "../ui/separator";
 import { ScrollArea } from "../ui/scroll-area";
 import JobPostBadge from "./job-post-badge";

@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getUserJobsAction } from ".";
+import { getJobInterview, getUserJobsAction } from ".";
 
 export const getJobPostsQueryOptions = queryOptions({
   queryKey: ["user-job-posts"],

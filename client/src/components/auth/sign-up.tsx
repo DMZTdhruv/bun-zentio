@@ -91,7 +91,7 @@ const SignUpCard = () => {
       <div>
         <Input
           className="h-[45px] w-full border-none bg-neutral-900 px-4 leading-none text-white"
-          placeholder="Enter your username"
+          placeholder="Enter your name"
           name="name"
           value={formData.name}
           onChange={handleChange}

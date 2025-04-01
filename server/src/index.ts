@@ -4,7 +4,6 @@ import { logger } from "hono/logger";
 import { connectToDb } from "./db";
 import authRoutes from "./routes/auth";
 import { cors } from "hono/cors";
-import { AiRepo } from "./repository/ai";
 import interviewRoutes from "./routes/interview";
 
 const port = process.env.PORT || 3001;
@@ -24,10 +23,8 @@ app.use(
    }),
 );
 
-// routes
 app.route("/api/auth", authRoutes);
 app.route("/api/interview", interviewRoutes);
-
 console.log(`server is running on http://localhost:${port}`);
 Bun.serve({
    port,
