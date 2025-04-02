@@ -4,8 +4,8 @@ import {
    createInterviewLeetCodeProblemsPrompt,
    createJobPostPrompt,
 } from "../constant";
+import { questionSchema, type QuestionSchema } from "../schema/leetcode";
 import { z } from "zod";
-import { questionSchema, type QuestionSchema } from "../schema/question";
 
 const geminiApiKey = process.env.GEMINI_KEY;
 if (!geminiApiKey) {
@@ -42,7 +42,7 @@ export namespace Gemini {
       position,
       job_type,
    }: GenerateLeetCodeQuestionsWithGeminiSchema): Promise<
-      QuestionSchema[] | undefined
+      QuestionSchema | undefined
    > => {
       console.log("\n\ngenerating LeetCode questions....");
       const prompt = `Generate 3 questions for a ${position} level ${job_type} developer position.`;
@@ -57,8 +57,8 @@ export namespace Gemini {
       }
 
       const jsonData = JSON.parse(jsonMatch[1]);
-      const validatedData = z.array(questionSchema).parse(jsonData);
-
+      console.log(JSON.stringify(jsonData, null, 2));
+      const validatedData = questionSchema.parse(jsonData);
       return validatedData;
    };
 }

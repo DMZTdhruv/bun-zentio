@@ -25,7 +25,7 @@ export const JobPost = pgTable("job_posts", {
       ],
    }).notNull(),
    position: text("position", { enum: ["senior", "mid", "junior"] }).notNull(),
-   location: text("location").default("sf"),
+   location: text("location").notNull().default("sf"),
    public: boolean("public").notNull().default(true),
 
    // what we want from ai

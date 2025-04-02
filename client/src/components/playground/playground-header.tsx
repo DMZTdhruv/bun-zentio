@@ -3,7 +3,6 @@ import { ChevronLeft, ChevronRight, PanelRight } from "lucide-react";
 import { useQueryState } from "nuqs";
 import { useQuery } from "@tanstack/react-query";
 import { getJobInterview } from "~/actions/interview";
-import { useJobPosts } from "~/store/job-post";
 
 export default function PlaygroundHeader({ id }: { id: string }) {
   const [, setNoteId] = useQueryState("note");
@@ -30,12 +29,13 @@ export default function PlaygroundHeader({ id }: { id: string }) {
     );
   }
 
-  const { job_post, interview } = data;
+  const jobPost = data.find((data) => data.type === "jobPost");
+  const problems = data.find((data) => data.type === "problems");
 
   const handleNext = () => {
     if (
-      interview?.questions &&
-      currentIndex < interview?.questions.length - 1
+      problems.problemDetails ||
+      currentIndex < problems.problemDetails.length - 1
     ) {
       setQ((currentIndex + 1).toString());
     }
@@ -48,14 +48,14 @@ export default function PlaygroundHeader({ id }: { id: string }) {
   };
 
   const getCurrentTitle = () => {
-    if (!interview?.questions || interview?.questions.length === 0) {
+    if (isPending) {
       return "Loading...";
     }
 
-    const question = interview.questions[currentIndex];
+    const question = problems.problemDetails[currentIndex];
     if (!question) return "Question not found";
 
-    const headerSection = question.sections.find((s) => s.type === "header");
+    const headerSection = question.sections["headerSection"];
     return headerSection?.title || `Problem ${currentIndex + 1}`;
   };
 
@@ -65,7 +65,7 @@ export default function PlaygroundHeader({ id }: { id: string }) {
         <div className="flex gap-1">
           <div className="flex items-center divide-neutral-800 rounded-lg">
             <span className="mr-4 text-2xl font-semibold capitalize">
-              {job_post?.title}
+              {jobPost?.jobDetails.title}
             </span>
             <button
               className="group border-r-none cursor-pointer rounded-l-lg border border-neutral-800 bg-neutral-900 p-2 transition-all hover:bg-neutral-800"
@@ -81,13 +81,13 @@ export default function PlaygroundHeader({ id }: { id: string }) {
               className="group border-r-none cursor-pointer rounded-r-lg border border-neutral-800 bg-neutral-900 p-2 transition-all hover:bg-neutral-800"
               onClick={handleNext}
               disabled={
-                !interview?.questions ||
-                currentIndex >= interview.questions.length - 1
+                !problems.problemDetails ||
+                currentIndex >= problems.problemDetails.length - 1
               }
             >
               <ChevronRight
                 size={20}
-                className={`transition-all ${interview?.questions && currentIndex < interview.questions.length - 1 ? "group-hover:scale-125" : "opacity-50"}`}
+                className={`transition-all ${problems.problemDetails && currentIndex < problems.problemDetails.length - 1 ? "group-hover:scale-125" : "opacity-50"}`}
               />
             </button>
           </div>

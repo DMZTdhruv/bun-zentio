@@ -8,6 +8,7 @@ import {
 } from "../utils/utils";
 
 type AuthReturn = {
+   id: string;
    username: string;
    name: string;
    token: string;
@@ -49,6 +50,7 @@ export const createUser = async (data: UserSchema): Promise<AuthReturn> => {
    });
 
    return {
+      id: res.id,
       token,
       username: res.username,
       name: res.email,
@@ -79,6 +81,7 @@ export const signInUser = async (data: SignInSchema): Promise<AuthReturn> => {
    });
 
    return {
+      id: user.id,
       token,
       username: user.username,
       name: user.email,

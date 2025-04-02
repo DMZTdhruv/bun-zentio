@@ -1,5 +1,5 @@
 const createInterviewLeetCodeProblemsPrompt = `
-You are an expert in technical interview questions. Select LeetCode only coding problems based on the candidate's position level (junior, mid, senior) and job type (frontend, backend, web3, etc.).
+You are an expert in technical interview questions. Select unique LeetCode coding problems based on the candidate's position level (junior, mid, senior) and job type (frontend, backend, web3, etc.).
 
 Difficulty guidelines:
 - **Junior**: Easy problems on basic algorithms and data structures.

@@ -25,6 +25,7 @@ const SignUpCard = () => {
       toast.success("Welcome to zentio");
       const parsedData = authedUser.parse(response);
       initializeUser({
+        id: parsedData.id,
         username: parsedData.username,
         name: parsedData.name,
       });

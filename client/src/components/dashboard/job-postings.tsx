@@ -1,13 +1,12 @@
 "use client";
 
-import { _useJobPostStore } from "~/store/job-post";
+// import { _useJobPostStore } from "~/store/job-post";
 import JobPostCard from "./job-post-card";
 import { useQuery } from "@tanstack/react-query";
 import { getJobPostsQueryOptions } from "~/actions/interview/query-options";
 
 const JobPosting = () => {
-  const { isPending } = useQuery(getJobPostsQueryOptions);
-  const jobPosts = _useJobPostStore((state) => state.jobPosts.reverse());
+  const { data, isPending } = useQuery(getJobPostsQueryOptions);
   return (
     <div className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
       {isPending
@@ -19,7 +18,7 @@ const JobPosting = () => {
               />
             );
           })
-        : jobPosts?.map((data) => {
+        : data?.map((data) => {
             return <JobPostCard key={data.id} {...data} />;
           })}
     </div>

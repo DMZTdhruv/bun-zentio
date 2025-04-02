@@ -1,7 +1,6 @@
 "use client";
 import { create } from "zustand";
 import { JobPostSchema } from "~/schema/job";
-import { createStore } from "zustand";
 import { createSelectors } from "./selector";
 
 interface JobPostStore {

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface AuthedUser {
+  id: string;
   username: string | null;
   name: string | null;
 }
@@ -14,7 +15,7 @@ interface AuthStore {
 export const _useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
-      user: { username: null, name: null },
+      user: { id: null, username: null, name: null },
       setAuthUser: (user) => set({ user }),
     }),
     {

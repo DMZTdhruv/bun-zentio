@@ -11,7 +11,7 @@ export const signUpHandler = factory.createHandlers(
    async (c) => {
       const data = c.req.valid("json");
       try {
-         const { token, username, name } = await createUser(data);
+         const { token, username, name, id } = await createUser(data);
          setCookie(c, "auth", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -20,7 +20,7 @@ export const signUpHandler = factory.createHandlers(
             maxAge: 60 * 60 * 24 * 7,
          });
 
-         const responseData = { username, name };
+         const responseData = { id, username, name };
          return successResponse({
             c,
             statusCode: 201,
@@ -51,7 +51,7 @@ export const signInHandler = factory.createHandlers(
       const data = c.req.valid("json");
       console.log(data);
       try {
-         const { token, username, name } = await signInUser(data);
+         const { id, token, username, name } = await signInUser(data);
 
          setCookie(c, "auth", token, {
             httpOnly: true,
@@ -61,7 +61,7 @@ export const signInHandler = factory.createHandlers(
             maxAge: 60 * 60 * 24 * 7,
          });
 
-         const responseData = { username, name };
+         const responseData = { id, username, name };
          return successResponse({
             c,
             statusCode: 200,

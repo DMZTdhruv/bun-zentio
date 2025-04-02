@@ -128,7 +128,7 @@ export const getJobInterviewService = async (
       throw new ZentioError(`no account is registered with this email`, 404);
    }
 
-   const data = InterviewRepo.getInterviewByJobPostId(jobPostId);
+   const data = await InterviewRepo.getInterviewByJobPostId(jobPostId);
    if (!data) {
       throw new ZentioError("Interview failed to load", 404);
    }

@@ -1,17 +1,12 @@
 import apiClient, { SuccessResponse } from "~/lib/api-client";
-import {
-  CreateJobPost,
-  JobInterviewResponse,
-  jobInterviewResponse,
-  JobPostSchema,
-} from "~/schema/job";
+import { CreateJobPost, JobPostSchema } from "~/schema/job";
+import { JobInterviewRootSchema } from "~/schema/question";
 import {
   addJobPost,
   deleteJobPost,
   getJobPosts,
   setJobPosts,
 } from "~/store/job-post";
-
 export const createJobAction = async (data: CreateJobPost) => {
   return apiClient
     .post<SuccessResponse<JobPostSchema>>("interview/create-job-post", data, {
@@ -61,12 +56,13 @@ export const getJobById = async (id: string) =>
 
 export const getJobInterview = async (id: string) =>
   apiClient
-    .get<SuccessResponse<JobInterviewResponse>>(
+    .get<SuccessResponse<JobInterviewRootSchema>>(
       `interview/job-interview/${id}`,
       {
         withCredentials: true,
       },
     )
     .then((res) => {
+      console.log(res.data.data);
       return res.data.data;
     });

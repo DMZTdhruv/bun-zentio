@@ -23,9 +23,9 @@ const SignInCard = () => {
     mutationFn: signInAction,
     onSuccess: (response) => {
       toast.success("signed in successfully");
-      console.log(response);
       const parsedData = authedUser.parse(response);
       initializeUser({
+        id: parsedData.id,
         username: parsedData.username,
         name: parsedData.name,
       });

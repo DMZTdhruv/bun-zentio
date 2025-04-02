@@ -11,8 +11,9 @@ const QuestionPanel = ({ id }: { id: string }) => {
     queryKey: ["user-job-posts", id],
     queryFn: ({ queryKey }) => getJobInterview(queryKey[1]),
   });
-  const [q, setQ] = useQueryState("q", { defaultValue: "0" });
+  const [q] = useQueryState("q", { defaultValue: "0" });
   const currentIndex = parseInt(q || "0");
+
   useEffect(() => {
     console.log(q);
   }, [q]);
@@ -36,11 +37,8 @@ const QuestionPanel = ({ id }: { id: string }) => {
     );
   }
 
-  if (
-    !data ||
-    !data.interview.questions ||
-    data.interview.questions.length === 0
-  ) {
+  const problemsData = data.find((data) => data.type === "problems")!;
+  if (!problemsData) {
     return (
       <div className="col-span-3 flex h-[calc(100dvh-76px)] w-full items-center justify-center">
         No questions available
@@ -48,24 +46,16 @@ const QuestionPanel = ({ id }: { id: string }) => {
     );
   }
 
-  const { interview, job_post } = data;
+  const { problemDetails } = problemsData;
 
-  const questions = interview.questions;
-  const activeQuestion = questions[currentIndex];
+  const activeQuestion = problemDetails[currentIndex];
 
   // Find the specific sections
-  const headerSection = activeQuestion.sections.find(
-    (s) => s.type === "header",
-  );
-  const examplesSection = activeQuestion.sections.find(
-    (s) => s.type === "examples",
-  );
-  const constraintsSection = activeQuestion.sections.find(
-    (s) => s.type === "constraints",
-  );
-  const additionalInfoSection = activeQuestion.sections.find(
-    (s) => s.type === "additional_information",
-  );
+  const headerSection = activeQuestion.sections["headerSection"];
+  const examplesSection = activeQuestion.sections["examplesSection"];
+  const constraintsSection = activeQuestion.sections["constraintsSection"];
+  const additionalInfoSection =
+    activeQuestion.sections["additionalInfoSection"];
 
   return (
     <div className="col-span-3 h-[calc(100dvh-90px)] w-full overflow-auto rounded-md">
@@ -142,7 +132,7 @@ const QuestionPanel = ({ id }: { id: string }) => {
             {expandedSections.constraints && (
               <ul className="list-disc space-y-1 pl-5 text-sm text-neutral-100">
                 {constraintsSection.constraints.map((constraint, index) => (
-                  <li key={index}>{constraint}</li>
+                  <li key={index}>{constraint.content}</li>
                 ))}
               </ul>
             )}

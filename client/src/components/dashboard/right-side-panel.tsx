@@ -94,9 +94,9 @@ const JobPostingDetails = ({
   created_by: string;
   jobPostId: string | null;
 }) => {
-  const username = _useAuthStore.getState().user.username;
+  const userId = _useAuthStore.getState().user.id;
   const navigate = useRouter();
-  const userJobPost = created_by === username;
+  const userJobPost = created_by === userId;
   return (
     <ScrollArea className="h-dvh max-h-screen">
       <Card className="mt-[50px] rounded-none border-none bg-transparent px-2 py-6 shadow-none">

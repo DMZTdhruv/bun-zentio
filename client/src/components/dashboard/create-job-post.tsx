@@ -28,8 +28,11 @@ import { createJobAction } from "~/actions/interview";
 import { toast } from "sonner";
 import { _useAuthStore } from "~/store/user";
 import { motion, AnimatePresence } from "motion/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { getJobPostsQueryOptions } from "~/actions/interview/query-options";
 
 const CreateJobPost = () => {
+  const queryClient = useQueryClient();
   const jobTypes = [
     "frontend",
     "backend",
@@ -46,6 +49,7 @@ const CreateJobPost = () => {
     mutationFn: createJobAction,
     onSuccess: () => {
       toast.success("craeted job post successfully");
+      queryClient.invalidateQueries(getJobPostsQueryOptions);
       setOpenDiaglog(false);
     },
   });

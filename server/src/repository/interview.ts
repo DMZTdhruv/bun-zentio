@@ -1,4 +1,5 @@
 import { and, eq, type InferSelectModel } from "drizzle-orm";
+
 import { db } from "../db";
 import { jobPostingSchema, type JobPostCreation } from "../schema/job";
 import { Gemini } from "./gemini";
@@ -15,6 +16,12 @@ import {
    JobInterview,
    Problem,
 } from "../db/schema/question.sql";
+import type {
+   JobInterviewRootSchema,
+   ProblemDetails,
+   topPart,
+} from "../schema/question";
+import type { z } from "zod";
 
 export namespace InterviewRepo {
    export type Model = InferSelectModel<typeof JobPost>;
@@ -118,21 +125,96 @@ export namespace InterviewRepo {
       )[0];
    };
 
-   export const getInterviewByJobPostId = async (jobPostId: string) => {
-      return (
-         await db
-            .select({
-               interview: JobInterview,
-               job_post: {
-                  id: JobPost.id,
-                  title: JobPost.title,
-                  job_type: JobPost.job_type,
+   export const getInterviewByJobPostId = async (
+      jobPostId: string,
+   ): Promise<JobInterviewRootSchema | undefined> => {
+      const jobInterviewData = await db
+         .select()
+         .from(JobPost)
+         .where(eq(JobPost.id, jobPostId))
+         .innerJoin(JobInterview, eq(JobInterview.job_post_id, JobPost.id))
+         .innerJoin(Problem, eq(Problem.job_interview_id, JobInterview.id))
+         .innerJoin(headerSection, eq(headerSection.problem_id, Problem.id))
+         .innerJoin(examplesSection, eq(examplesSection.problem_id, Problem.id))
+         .innerJoin(
+            constraintsSection,
+            eq(constraintsSection.problem_id, Problem.id),
+         )
+         .innerJoin(
+            additionalInfoSection,
+            eq(additionalInfoSection.problem_id, Problem.id),
+         );
+
+      // Check if any data was found
+      if (jobInterviewData.length === 0) {
+         return undefined;
+      }
+
+      // Create the jobDetails array with the correct types
+      // fine asf
+      const jobDetails = [
+         {
+            type: "jobPost" as const,
+            jobDetails: { ...jobInterviewData[0].job_posts },
+         },
+         {
+            type: "jobInterview" as const,
+            jobInterviewDetails: { ...jobInterviewData[0].job_interview },
+         },
+      ] as z.infer<typeof topPart>;
+
+      console.log(JSON.stringify(jobDetails, null, 2));
+      const problemsData = {
+         type: "problems" as const,
+         problemDetails: [] as ProblemDetails[],
+      };
+
+      for (const data of jobInterviewData) {
+         const exampleDataPromise = db
+            .select()
+            .from(example)
+            .where(eq(example.example_section_id, data.examples_section.id));
+         const constraintDataPromise = db
+            .select()
+            .from(constraint)
+            .where(
+               eq(
+                  constraint.constraint_section_id,
+                  data.constraints_section.id,
+               ),
+            );
+         const [exampleData, constraintData] = await Promise.all([
+            exampleDataPromise,
+            constraintDataPromise,
+         ]);
+
+         const problemData: ProblemDetails = {
+            ...data.problem,
+            sections: {
+               headerSection: data.header_section,
+               examplesSection: {
+                  ...data.examples_section,
+                  type: "examples" as const,
+                  examples: exampleData,
                },
-            })
-            .from(JobInterview)
-            .where(eq(JobInterview.job_post_id, jobPostId))
-            .innerJoin(JobPost, eq(JobInterview.job_post_id, JobPost.id))
-      )[0];
+               constraintsSection: {
+                  ...data.constraints_section,
+                  type: "constraints" as const,
+                  constraints: constraintData,
+               },
+               additionalInfoSection: {
+                  ...data.additional_info_section,
+                  type: "additional_information" as const,
+               },
+            },
+         };
+
+         problemsData.problemDetails.push(problemData);
+      }
+
+      const returnData: JobInterviewRootSchema = [...jobDetails, problemsData];
+
+      return returnData;
    };
 
    export const generateQuestionForJobPost = async (
