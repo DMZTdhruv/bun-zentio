@@ -36,6 +36,37 @@ export const createJobPostHandler = factory.createHandlers(
    },
 );
 
+export const getJobPosts = factory.createHandlers(
+   authenticatedAuthToken,
+   async (c) => {
+      try {
+         const user = c.get("auth_user");
+         const res = await getUserJobPostService(user.id);
+         console.log({ res });
+         return successResponse({
+            c,
+            message: "successfully created an ai mock interview job post",
+            data: res,
+            statusCode: 201,
+         });
+      } catch (error) {
+         console.log("Error fetching user job posts", error);
+         if (error instanceof ZentioError) {
+            return errorResponse({
+               c,
+               statusCode: error.status,
+               message: error.message,
+            });
+         }
+         return errorResponse({
+            c,
+            statusCode: 500,
+            message: "internal server error",
+         });
+      }
+   },
+);
+
 export const getUserJobPostHandler = factory.createHandlers(
    authenticatedAuthToken,
    async (c) => {

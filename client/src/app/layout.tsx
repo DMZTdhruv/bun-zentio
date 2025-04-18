@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 import { ReactQueryProvider } from "~/providers/react-query";

@@ -39,6 +39,19 @@ export const getUserJobPostService = async (
    return res;
 };
 
+export const getJobPosts = async (userId: string): Promise<Model[]> => {
+   const userExists = await UserRepo.getUserById(userId);
+   if (!userExists) {
+      throw new ZentioError(`no account registered with this email`, 404);
+   }
+   const res = await InterviewRepo.getUserJobPosts(userId);
+   if (!res) {
+      throw new ZentioError(`failed to fetch job posts`, 400);
+   }
+
+   return res;
+};
+
 export const deleteJobPostService = async (
    userId: string,
    id: string,
@@ -85,38 +98,6 @@ export const getJobPostByIdService = async (
    }
 
    return res;
-};
-
-export const generateJobPostQuestionsById = async (
-   userId: string,
-   postId: string,
-): Promise<string> => {
-   const userExists = await UserRepo.getUserById(userId);
-   if (!userExists) {
-      throw new ZentioError(`no account is registered with this email`, 404);
-   }
-   const res = await InterviewRepo.getJobPostById(userId, postId);
-   if (!res) {
-      throw new ZentioError(
-         `failed to fetch a job post with the id ${postId}`,
-         400,
-      );
-   }
-
-   const response = await InterviewRepo.generateQuestionForJobPost(
-      userId,
-      postId,
-      {
-         job_type: res.job_type,
-         position: res.position,
-      },
-   );
-
-   if (!response) {
-      throw new ZentioError(`failed to create job questions ${postId}`, 400);
-   }
-
-   return response.questions as string;
 };
 
 export const getJobInterviewService = async (

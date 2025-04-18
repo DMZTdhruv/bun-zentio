@@ -9,7 +9,7 @@ if (!url) {
 
 export const client = new Client({
    connectionString: url,
-   ssl: true,
+   ssl: false,
 });
 
 export const connectToDb = async () => {
