@@ -8,7 +8,10 @@ import {
    getJobPostByIdService,
    getCommunityJobPostsService,
    getUserJobPostsService,
+   getJobPostByTitleService,
 } from "../services/inteview";
+import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
 
 const factory = createFactory();
 
@@ -118,6 +121,40 @@ export const deleteJobPostHandler = factory.createHandlers(
          });
       } catch (error) {
          console.log("Error fetching user job posts", error);
+         if (error instanceof ZentioError) {
+            return errorResponse({
+               c,
+               statusCode: error.status,
+               message: error.message,
+            });
+         }
+         return errorResponse({
+            c,
+            statusCode: 500,
+            message: "internal server error",
+         });
+      }
+   },
+);
+
+export const getJobPostByTitle = factory.createHandlers(
+   authenticatedAuthToken,
+   zValidator("query", z.object({ title: z.string() })),
+   async (c) => {
+      try {
+         const user = c.get("auth_user");
+         console.log(user);
+         const title = c.req.valid("query").title;
+         const res = await getJobPostByTitleService(user.id, title);
+         console.log(res);
+         return successResponse({
+            c,
+            message: "job post matching the " + title + " title",
+            data: res,
+            statusCode: 200,
+         });
+      } catch (error) {
+         console.log(`Error fetching job post`, error);
          if (error instanceof ZentioError) {
             return errorResponse({
                c,

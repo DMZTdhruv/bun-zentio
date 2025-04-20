@@ -1,4 +1,4 @@
-import { and, eq, not, type InferSelectModel } from "drizzle-orm";
+import { and, eq, ilike, not, or, type InferSelectModel } from "drizzle-orm";
 
 import { db } from "../db";
 import { jobPostingSchema, type JobPostCreation } from "../schema/job";
@@ -124,6 +124,21 @@ export namespace InterviewRepo {
       }
       if (record.created_by === userId) return record;
       return undefined;
+   };
+
+   export const getJobPostByTitle = async (
+      userId: string,
+      title: string,
+   ): Promise<Model[]> => {
+      return await db
+         .select()
+         .from(JobPost)
+         .where(
+            and(
+               or(eq(JobPost.created_by, userId), eq(JobPost.public, true)),
+               ilike(JobPost.title, `%${title}%`),
+            ),
+         );
    };
 
    export const deleteJobPost = async (

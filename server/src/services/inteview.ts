@@ -92,6 +92,7 @@ export const getJobPostByIdService = async (
    }
 
    const res = await InterviewRepo.getJobPostById(userId, id);
+
    if (!res) {
       throw new ZentioError(
          `failed to fetch a job post with the id ${id}`,
@@ -99,6 +100,14 @@ export const getJobPostByIdService = async (
       );
    }
 
+   return res;
+};
+
+export const getJobPostByTitleService = async (
+   userId: string,
+   title: string,
+): Promise<Model[]> => {
+   const res = await InterviewRepo.getJobPostByTitle(userId, title);
    return res;
 };
 

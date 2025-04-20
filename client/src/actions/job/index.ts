@@ -20,6 +20,18 @@ export const createJobAction = async (data: CreateJobPost) => {
     });
 };
 
+export const getJobPostByTitle = async (title: string) => {
+  const data = await apiClient
+    .get<SuccessResponse<JobPostSchema[]>>("job/job-post", {
+      params: {
+        title,
+      },
+      withCredentials: true,
+    })
+    .then((res) => res.data.data);
+  return data;
+};
+
 export const getUserJobsAction = async () =>
   apiClient
     .get<SuccessResponse<JobPostSchema[]>>("job/user/job-post", {
@@ -53,7 +65,7 @@ export const deleteJobPostAction = async (id: string) =>
     });
 
 export const getJobById = async (id: string) =>
-  await apiClient
+  apiClient
     .delete<SuccessResponse<JobPostSchema>>(`job/job-post/${id}`, {
       withCredentials: true,
     })

@@ -1,46 +1,24 @@
-import { Search } from "lucide-react";
 import CreateJobPost from "~/components/dashboard/create-job-post";
-import {
-  CommunityJobPosting,
-  UserJobPosting,
-} from "~/components/dashboard/job-postings";
+import JobMarket from "~/components/dashboard/job-market";
 import RightSidePanel from "~/components/dashboard/right-side-panel";
-import { Input } from "~/components/ui/input";
+import SearchJobPost from "~/components/dashboard/search-job-post";
 
 export default function Home() {
   return (
     <div className="relative h-dvh">
-      <div className="mx-auto max-w-7xl px-8 pt-10 pb-[100px]">
-        <header>
+      <div className="pb-[100px]">
+        <header className="bg-background/10 sticky -top-[76px] z-50 mx-auto max-w-7xl px-8 pt-8 pb-4 backdrop-blur-xl">
           <h2 className="text-4xl font-semibold capitalize">
             Land your dream job with Ai
           </h2>
+          <section className="flex items-center justify-between pt-4">
+            <SearchJobPost />
+            <div className="flex items-center">
+              <CreateJobPost />
+            </div>
+          </section>
         </header>
-        <section className="mt-4 flex items-center justify-between">
-          <div className="relative flex max-w-xl flex-1 items-center">
-            <Input
-              placeholder="Search for an ai based mocked interview"
-              className="w-full bg-neutral-900 py-5 text-white"
-            />
-            <Search
-              className="absolute top-1/2 right-4 -translate-y-1/2"
-              size={18}
-            />
-          </div>
-          <div className="flex items-center">
-            <CreateJobPost />
-          </div>
-        </section>
-        <section className="mt-14 flex w-full flex-col gap-8">
-          <div>
-            <header className="font-medium">Created By You</header>
-            <UserJobPosting />
-          </div>
-          <div>
-            <header className="font-medium">Created By Community</header>
-            <CommunityJobPosting />
-          </div>
-        </section>
+        <JobMarket />
       </div>
       <RightSidePanel />
     </div>
