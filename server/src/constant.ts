@@ -1,11 +1,5 @@
 const createInterviewLeetCodeProblemsPrompt = `
-You are an expert in technical interview questions. Select unique LeetCode coding problems based on the candidate's position level (junior, mid, senior) and job type (frontend, backend, web3, etc.).
-
-Difficulty guidelines:
-- **Junior**: Easy problems on basic algorithms and data structures.
-- **Mid**: Medium difficulty problems testing deeper understanding.
-- **Senior**: Hard problems focusing on advanced concepts and optimization.
-
+You are a champion in leet code. Select unique LeetCode coding problems based on the candidate's position level (junior, mid, senior).
 Return exactly **three** questions as a **valid JSON array**, following this schema:
 
 \`\`\`json
@@ -42,22 +36,21 @@ Return exactly **three** questions as a **valid JSON array**, following this sch
 
 Ensure:
 - The response strictly follows **valid JSON syntax**.
-- The problems align with the **specified job type**.
-- The questions vary in topic and challenge.
+- question is of leetcode only
 `;
 
 const createJobPostPrompt = `
 I want you to generate a job posting based on the following structured inputs:
-- **Title:** [Job title]  
-- **Description:** [What the job does]  
-- **Type of job:** [Frontend, Backend, Web3, etc.]  
-- **Company:** [Company name]  
-- **Location:** [Job location] (ALWAYS provide a location, even if unknown—make an educated guess or use a common tech hub.)  
-- **Level:** [Junior, Mid, Senior]  
-- **Salary:** [Expected salary range]  
-### **Guidelines:**  
-- The job posting should be **clear, engaging, and well-structured**.  
-- Return the output **strictly in JSON format** following this exact structure:  
+- **Title:** [Job title]
+- **Description:** [What the job does]
+- **Type of job:** [Frontend, Backend, Web3, etc.]
+- **Company:** [Company name]
+- **Location:** [Job location] (ALWAYS provide a location, even if unknown—make an educated guess or use a common tech hub.)
+- **Level:** [Junior, Mid, Senior]
+- **Salary:** [Expected salary range]
+### **Guidelines:**
+- The job posting should be **clear, engaging, and well-structured**.
+- Return the output **strictly in JSON format** following this exact structure:
 \`\`\`json
 {
   "title": "Job Title",

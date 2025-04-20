@@ -24,6 +24,7 @@ const SignInCard = () => {
     onSuccess: (response) => {
       toast.success("signed in successfully");
       const parsedData = authedUser.parse(response);
+      console.log(parsedData);
       initializeUser({
         id: parsedData.id,
         username: parsedData.username,

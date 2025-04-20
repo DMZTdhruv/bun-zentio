@@ -16,3 +16,15 @@ export const signInAction = async (data: SignInSchema) => {
     })
     .then((res) => res.data.data);
 };
+
+export const signOutAction = async () => {
+  return apiClient
+    .post<SuccessResponse<AuthResponse>>(
+      "auth/sign-out",
+      {},
+      {
+        withCredentials: true,
+      },
+    )
+    .then((res) => res.data.data);
+};

@@ -24,7 +24,7 @@ export const createJobPostService = async (
    return res;
 };
 
-export const getUserJobPostService = async (
+export const getUserJobPostsService = async (
    userId: string,
 ): Promise<Model[]> => {
    const userExists = await UserRepo.getUserById(userId);
@@ -39,14 +39,16 @@ export const getUserJobPostService = async (
    return res;
 };
 
-export const getJobPosts = async (userId: string): Promise<Model[]> => {
+export const getCommunityJobPostsService = async (
+   userId: string,
+): Promise<Model[]> => {
    const userExists = await UserRepo.getUserById(userId);
    if (!userExists) {
       throw new ZentioError(`no account registered with this email`, 404);
    }
-   const res = await InterviewRepo.getUserJobPosts(userId);
+   const res = await InterviewRepo.getCommunityJobPosts(userId);
    if (!res) {
-      throw new ZentioError(`failed to fetch job posts`, 400);
+      throw new ZentioError(`failed to fetch community job posts`, 400);
    }
 
    return res;

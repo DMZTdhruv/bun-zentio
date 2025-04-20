@@ -10,7 +10,7 @@ const JobPostBadge = ({ title, className }: JobPostBadgeProps) => {
   return (
     <span
       className={cn(
-        `w-fit rounded-full border bg-neutral-800 px-4 py-1 font-medium group-hover:border-neutral-700`,
+        `w-fit rounded-full border bg-neutral-800 px-4 py-1 text-sm font-medium group-hover:border-neutral-700`,
         className,
       )}
     >

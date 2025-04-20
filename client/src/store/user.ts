@@ -25,3 +25,9 @@ export const _useAuthStore = create<AuthStore>()(
 );
 
 export const initializeUser = _useAuthStore.getState().setAuthUser;
+export const logOutUser = () =>
+  _useAuthStore().setAuthUser({
+    username: "",
+    id: "",
+    name: "",
+  });

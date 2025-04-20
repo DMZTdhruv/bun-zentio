@@ -1,6 +1,9 @@
 import { Search } from "lucide-react";
 import CreateJobPost from "~/components/dashboard/create-job-post";
-import JobPosting from "~/components/dashboard/job-postings";
+import {
+  CommunityJobPosting,
+  UserJobPosting,
+} from "~/components/dashboard/job-postings";
 import RightSidePanel from "~/components/dashboard/right-side-panel";
 import { Input } from "~/components/ui/input";
 
@@ -28,10 +31,14 @@ export default function Home() {
             <CreateJobPost />
           </div>
         </section>
-        <section className="mt-14 w-full">
+        <section className="mt-14 flex w-full flex-col gap-8">
           <div>
             <header className="font-medium">Created By You</header>
-            <JobPosting />
+            <UserJobPosting />
+          </div>
+          <div>
+            <header className="font-medium">Created By Community</header>
+            <CommunityJobPosting />
           </div>
         </section>
       </div>

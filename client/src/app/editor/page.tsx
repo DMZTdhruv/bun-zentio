@@ -1,21 +1,17 @@
 "use client";
-import dynamic from "next/dynamic";
 
-const LazyZentioEditor = dynamic(
-  () => import("~/components/editor/pl-editor"),
-  {
-    ssr: false,
-    loading: () => <div>loading..</div>,
-  },
-);
+import { GlobalZentioEditor } from "~/components/editor/pl-editor";
+import { useNoteStore } from "~/store/note";
 
 export default function Page() {
+  const { globalNoteContent } = useNoteStore();
+  console.log(globalNoteContent);
   return (
     <div
       className="max-h-screen w-full overflow-y-scroll caret-white"
       data-registry="plate"
     >
-      <LazyZentioEditor />
+      <GlobalZentioEditor value={globalNoteContent} />
     </div>
   );
 }

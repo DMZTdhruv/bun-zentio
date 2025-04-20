@@ -1,6 +1,5 @@
 import { createFactory } from "hono/factory";
 import { authenticatedAuthToken } from "../middleware/auth";
-import { createJobInterviewQuestionsCreation } from "../validators/interview";
 import { errorResponse, successResponse, ZentioError } from "../utils/utils";
 import { getJobInterviewService } from "../services/inteview";
 

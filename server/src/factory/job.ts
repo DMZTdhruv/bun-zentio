@@ -6,7 +6,8 @@ import {
    createJobPostService,
    deleteJobPostService,
    getJobPostByIdService,
-   getUserJobPostService,
+   getCommunityJobPostsService,
+   getUserJobPostsService,
 } from "../services/inteview";
 
 const factory = createFactory();
@@ -36,18 +37,17 @@ export const createJobPostHandler = factory.createHandlers(
    },
 );
 
-export const getJobPosts = factory.createHandlers(
+export const getCommunityJobPostsHandler = factory.createHandlers(
    authenticatedAuthToken,
    async (c) => {
       try {
          const user = c.get("auth_user");
-         const res = await getUserJobPostService(user.id);
-         console.log({ res });
+         const res = await getCommunityJobPostsService(user.id);
          return successResponse({
             c,
-            message: "successfully created an ai mock interview job post",
+            message: "successfully fetched the community job posts",
             data: res,
-            statusCode: 201,
+            statusCode: 200,
          });
       } catch (error) {
          console.log("Error fetching user job posts", error);
@@ -72,13 +72,13 @@ export const getUserJobPostHandler = factory.createHandlers(
    async (c) => {
       try {
          const user = c.get("auth_user");
-         const res = await getUserJobPostService(user.id);
+         const res = await getUserJobPostsService(user.id);
          console.log({ res });
          return successResponse({
             c,
-            message: "successfully created an ai mock interview job post",
+            message: "successfully fetched user job posts",
             data: res,
-            statusCode: 201,
+            statusCode: 200,
          });
       } catch (error) {
          console.log("Error fetching user job posts", error);

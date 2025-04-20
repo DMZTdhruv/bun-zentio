@@ -9,7 +9,7 @@ import { useQueryState } from "nuqs";
 const QuestionPanel = ({ id }: { id: string }) => {
   const { data, isLoading } = useQuery({
     queryKey: ["user-job-posts", id],
-    queryFn: ({ queryKey }) => getJobInterview(queryKey[1]),
+    queryFn: ({ queryKey }) => getJobInterview({ id: queryKey[1] }),
   });
   const [q] = useQueryState("q", { defaultValue: "0" });
   const currentIndex = parseInt(q || "0");

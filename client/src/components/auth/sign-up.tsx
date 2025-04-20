@@ -60,10 +60,12 @@ const SignUpCard = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    console.log("hello world");
     try {
       const data = userSchema.parse(formData);
       mutate(data);
     } catch (error) {
+      console.log(error);
       if (error instanceof z.ZodError) {
         const newErrors: FormErrors = {};
         error.errors.forEach((err) => {

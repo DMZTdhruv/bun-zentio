@@ -10,7 +10,7 @@ export default function PlaygroundHeader({ id }: { id: string }) {
 
   const { data, isPending, error } = useQuery({
     queryKey: ["user-job-posts", id], // Replace "interview-id" with actual id if needed
-    queryFn: ({ queryKey }) => getJobInterview(queryKey[1]),
+    queryFn: ({ queryKey }) => getJobInterview({ id: queryKey[1] }),
   });
 
   const currentIndex = parseInt(q || "0");

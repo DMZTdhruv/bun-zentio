@@ -16,7 +16,7 @@ const Playground = async ({ params }: { params: Promise<{ id: string }> }) => {
         <CodingPanel />
         <AiPanel />
       </div>
-      <PlaygroundNotesPanel />
+      <PlaygroundNotesPanel id={id} />
     </div>
   );
 };

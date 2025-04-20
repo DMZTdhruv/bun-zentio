@@ -3,18 +3,15 @@
 import { PanelRight } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { motion } from "motion/react";
-import dynamic from "next/dynamic";
 import { useQueryState } from "nuqs";
-const LazyZentioEditor = dynamic(
-  () => import("~/components/editor/pl-editor"),
-  {
-    ssr: false,
-    loading: () => <div>loading..</div>,
-  },
-);
+import { InterviewZentioEditor } from "../editor/pl-editor";
+import { useNoteStore } from "~/store/note";
+import { useMemo } from "react";
 
-const PlaygroundNotesPanel = () => {
+const PlaygroundNotesPanel = ({ id }: { id: string }) => {
   const [noteId, setNoteId] = useQueryState("note");
+  const { interviewNoteContent } = useNoteStore();
+  const editorContent = useMemo(() => interviewNoteContent[id], [id]);
   return (
     <AnimatePresence>
       {noteId && (
@@ -50,132 +47,7 @@ const PlaygroundNotesPanel = () => {
               />
             </button>
 
-            <LazyZentioEditor
-              value={[
-                {
-                  children: [
-                    {
-                      text: "Hello world",
-                    },
-                  ],
-                  type: "h1",
-                  id: "sQcxjlmM2W",
-                },
-                {
-                  children: [
-                    {
-                      text: "nice to meet you",
-                    },
-                  ],
-                  type: "p",
-                  id: "5y6L4t9BY9",
-                },
-                {
-                  type: "p",
-                  id: "7pQNrN2cML",
-                  children: [
-                    {
-                      text: "take your notes here",
-                    },
-                  ],
-                },
-                {
-                  type: "p",
-                  id: "mBzfmX_o4C",
-                  children: [
-                    {
-                      text: "hehe",
-                    },
-                  ],
-                  indent: 1,
-                  listStyleType: "disc",
-                },
-                {
-                  type: "p",
-                  id: "jh4vpjmFqR",
-                  indent: 1,
-                  listStyleType: "disc",
-                  children: [
-                    {
-                      text: "nice",
-                    },
-                  ],
-                  listStart: 2,
-                },
-                {
-                  type: "p",
-                  id: "2A4um2Vtyw",
-                  indent: 1,
-                  listStyleType: "disc",
-                  listStart: 3,
-                  children: [
-                    {
-                      text: "life",
-                    },
-                  ],
-                },
-                {
-                  children: [
-                    {
-                      type: "code_line",
-                      id: "4y8VMD1DP2",
-                      children: [
-                        {
-                          text: 'console.log("hello world")',
-                        },
-                      ],
-                    },
-                  ],
-                  type: "code_block",
-                  id: "opoPX7MDY0",
-                },
-                {
-                  children: [
-                    {
-                      text: "",
-                    },
-                  ],
-                  type: "hr",
-                  id: "APD3VpyAOA",
-                },
-                {
-                  children: [
-                    {
-                      text: "lmao great xD",
-                    },
-                  ],
-                  type: "p",
-                  id: "LlKosgVW2G",
-                },
-                {
-                  type: "hr",
-                  id: "A6_pCqzlUa",
-                  children: [
-                    {
-                      text: "",
-                    },
-                  ],
-                },
-                {
-                  type: "p",
-                  id: "3kEI09NQh8",
-                  children: [
-                    {
-                      text: "see ya hehe “:3”",
-                    },
-                  ],
-                },
-                {
-                  children: [
-                    {
-                      text: "",
-                    },
-                  ],
-                  type: "p",
-                  id: "9l_1q2dNDN",
-                },
-              ]}
-            />
+            <InterviewZentioEditor id={id} value={editorContent} />
           </motion.div>
         </>
       )}

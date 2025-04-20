@@ -1,4 +1,4 @@
-import { and, eq, type InferSelectModel } from "drizzle-orm";
+import { and, eq, not, type InferSelectModel } from "drizzle-orm";
 
 import { db } from "../db";
 import { jobPostingSchema, type JobPostCreation } from "../schema/job";
@@ -72,7 +72,6 @@ export namespace InterviewRepo {
       // generate questions for job
       await generateQuestionForJobPost(userId, job_post.id, {
          position: job_post.position,
-         job_type: job_post.job_type,
       });
 
       return job_post;
@@ -82,6 +81,20 @@ export namespace InterviewRepo {
       userId: string,
    ): Promise<Model[] | undefined> => {
       return db.select().from(JobPost).where(eq(JobPost.created_by, userId));
+   };
+
+   export const getCommunityJobPosts = async (userId: string) => {
+      const data = await db
+         .select()
+         .from(JobPost)
+         .where(
+            and(eq(JobPost.public, true), not(eq(JobPost.created_by, userId))),
+         );
+      console.log({
+         userId,
+         data,
+      });
+      return data;
    };
 
    export const getUserJobPostById = async (
@@ -220,7 +233,7 @@ export namespace InterviewRepo {
    export const generateQuestionForJobPost = async (
       userId: string,
       postId: string,
-      { position, job_type }: GenerateLeetCodeQuestionsWithGeminiSchema,
+      { position }: GenerateLeetCodeQuestionsWithGeminiSchema,
    ) => {
       // create the job interview
       const jobInterview = (
@@ -235,7 +248,6 @@ export namespace InterviewRepo {
 
       // make ai make question hell yeah
       const questions = await Gemini.generateLeetCodeQuestions({
-         job_type,
          position,
       });
 

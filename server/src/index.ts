@@ -5,6 +5,7 @@ import { connectToDb } from "./db";
 import authRoutes from "./routes/auth";
 import { cors } from "hono/cors";
 import interviewRoutes from "./routes/interview";
+import jobRoutes from "./routes/job";
 
 const port = process.env.PORT || 3001;
 const app = new Hono();
@@ -25,6 +26,7 @@ app.use(
 
 app.route("/api/auth", authRoutes);
 app.route("/api/interview", interviewRoutes);
+app.route("/api/job", jobRoutes);
 console.log(`server is running on http://localhost:${port}`);
 Bun.serve({
    port,

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const userSchema = z.object({
-  id: z.string().nullable(),
+  id: z.string().optional(),
   username: z.string().min(3).max(20),
   name: z.string().min(3).max(20),
   email: z.string().email(),
@@ -18,6 +18,7 @@ export const signInSchema = userSchema.omit({
   username: true,
   name: true,
 });
+
 export const authedUser = z.object({
   id: z.string(),
   username: z.string(),

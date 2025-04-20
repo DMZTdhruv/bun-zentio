@@ -1,8 +1,9 @@
 import { createFactory } from "hono/factory";
 import { signUpValidator, signInValidator } from "../validators/auth";
 import { updatePassword, createUser, signInUser } from "../services/auth";
-import { setCookie, setSignedCookie } from "hono/cookie";
+import { setCookie } from "hono/cookie";
 import { errorResponse, successResponse, ZentioError } from "../utils/utils";
+import { authenticatedAuthToken } from "../middleware/auth";
 
 const factory = createFactory();
 
@@ -86,22 +87,22 @@ export const signInHandler = factory.createHandlers(
 );
 
 export const signOutHandler = factory.createHandlers(
-   signUpValidator,
+   authenticatedAuthToken,
    async (c) => {
-      const data = c.req.valid("json");
+      const user = c.get("auth_user");
       try {
          setCookie(c, "auth", "", {
             httpOnly: true,
-            secure: true,
+            secure: process.env.NODE_ENV === "production",
             sameSite: "Strict",
             path: "/",
          });
 
          return successResponse({
             c,
-            statusCode: 201,
-            message: "successfully created user",
-            data: "successfully logged out as " + data.name,
+            statusCode: 200,
+            message: "successfully logged out user",
+            data: "successfully logged out as " + user.name,
          });
       } catch (error) {
          console.log("Error during creating user", error);

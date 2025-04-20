@@ -17,7 +17,7 @@ import JobPostBadge from "./job-post-badge";
 import { PanelRight } from "lucide-react";
 import { _useAuthStore } from "~/store/user";
 import { useMutation } from "@tanstack/react-query";
-import { deleteJobPostAction } from "~/actions/interview";
+import { deleteJobPostAction } from "~/actions/job";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
 

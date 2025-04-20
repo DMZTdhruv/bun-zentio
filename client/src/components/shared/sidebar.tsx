@@ -2,7 +2,13 @@
 
 import { _useSidebarStore } from "~/store/sidebar";
 import { ToggleSidebar } from "../dashboard/toggle-sidebar";
-import { House, LucideProps, Settings, User } from "lucide-react";
+import {
+  House,
+  LucideProps,
+  NotebookTextIcon,
+  Settings,
+  User,
+} from "lucide-react";
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,14 +17,16 @@ export const SideBar = () => {
   const sidebarState = _useSidebarStore((state) => state.openSidebar);
   const navItems = [
     { icon: House, text: "Dashboard", href: "/" },
-    { icon: Settings, text: "Settings", href: "/settings" },
+    { icon: NotebookTextIcon, text: "Notes", href: "/editor" },
     { icon: User, text: "Profile", href: "/profile" },
+    { icon: Settings, text: "Settings", href: "/settings" },
   ];
+
   const pathname = usePathname();
   if (pathname === "/sign-in" || pathname === "/sign-up") return;
   return (
     <div
-      className={`${sidebarState ? "w-[45px]" : "ml-0"} smooth-transition relative h-screen w-64 bg-black`}
+      className={`${sidebarState ? "w-[45px]" : "ml-0"} smooth-transition relative h-screen w-48 bg-black`}
     >
       <ToggleSidebar className="absolute top-6 right-3" />
       <p className="pt-4 pl-4 text-2xl font-semibold">

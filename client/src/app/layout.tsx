@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 import { ReactQueryProvider } from "~/providers/react-query";
 import { Toaster } from "sonner";
 import { SideBar } from "~/components/shared/sidebar";
-import { satoshiFont } from "~/components/font";
+import { geist } from "~/components/font";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import Wrapper from "~/components/wrapper";
 
@@ -21,9 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${satoshiFont.variable} dark antialiased`}>
+      <body className={`${geist.variable} dark antialiased`}>
         <ReactQueryProvider>
-          <div className="font-satoshi flex bg-black">
+          <div className="font-geist flex bg-black">
             <NuqsAdapter>
               <Suspense fallback={<div>Loading...</div>}>
                 <SideBar />

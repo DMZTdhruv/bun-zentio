@@ -40,12 +40,11 @@ export namespace Gemini {
 
    export const generateLeetCodeQuestions = async ({
       position,
-      job_type,
    }: GenerateLeetCodeQuestionsWithGeminiSchema): Promise<
       QuestionSchema | undefined
    > => {
       console.log("\n\ngenerating LeetCode questions....");
-      const prompt = `Generate 3 questions for a ${position} level ${job_type} developer position.`;
+      const prompt = `Generate 3 leet code question for the level ${position}.`;
 
       const result = await leetCodeModel.generateContent(prompt);
       const jsonMatch = result.response

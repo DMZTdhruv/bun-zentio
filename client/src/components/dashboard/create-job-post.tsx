@@ -24,12 +24,12 @@ import {
 import { z } from "zod";
 import { createJobPost } from "~/schema/job";
 import { useMutation } from "@tanstack/react-query";
-import { createJobAction } from "~/actions/interview";
+import { createJobAction } from "~/actions/job";
 import { toast } from "sonner";
 import { _useAuthStore } from "~/store/user";
 import { motion, AnimatePresence } from "motion/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { getJobPostsQueryOptions } from "~/actions/interview/query-options";
+import { getJobPostsQueryOptions } from "~/actions/job/query-options";
 
 const CreateJobPost = () => {
   const queryClient = useQueryClient();
