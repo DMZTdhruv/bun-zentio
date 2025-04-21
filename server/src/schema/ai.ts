@@ -13,6 +13,13 @@ export const generateLeetCodeQuestionsWithGeminiSchema = z.object({
    position: z.enum(["senior", "mid", "junior"]),
 });
 
+export const messageSchema = z.object({
+   sender: z.enum(["assistant", "instruction", "user"]),
+   content: z.string(),
+});
+
 export type GenerateLeetCodeQuestionsWithGeminiSchema = z.infer<
    typeof generateLeetCodeQuestionsWithGeminiSchema
 >;
+
+export type Message = z.infer<typeof messageSchema>;

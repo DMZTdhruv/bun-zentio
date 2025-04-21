@@ -52,7 +52,6 @@ export namespace InterviewRepo {
 
       // gemini generate questions
       const res = await Gemini.generateJobPostDetails(promptData);
-      const aiResponse = jobPostingSchema.parse(res);
 
       // creating questions
       const job_post = (
@@ -64,7 +63,7 @@ export namespace InterviewRepo {
                company,
                title,
                created_by: userId,
-               job_posting: aiResponse,
+               job_posting: res,
             })
             .returning()
       )[0];
