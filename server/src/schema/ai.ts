@@ -18,6 +18,30 @@ export const messageSchema = z.object({
    content: z.string(),
 });
 
+const uIMessageSchema = z.object({
+   id: z.string(),
+   messages: z.array(
+      z.object({
+         role: z.enum(["user", "assistant", "system"]),
+         content: z.string(),
+         parts: z.array(
+            z.object({
+               type: z.string(),
+               text: z.string(),
+            }),
+         ),
+      }),
+   ),
+});
+
+export const uiMessagesSchema = z.object({
+   messages: z.array(z.any()),
+   system: z.string().optional(),
+});
+
+export type UiMessagesSchema = z.infer<typeof uIMessageSchema>;
+export const messagesSchema = z.array(messageSchema);
+
 export type GenerateLeetCodeQuestionsWithGeminiSchema = z.infer<
    typeof generateLeetCodeQuestionsWithGeminiSchema
 >;

@@ -7,6 +7,7 @@ import { cors } from "hono/cors";
 import interviewRoutes from "./routes/interview";
 import jobRoutes from "./routes/job";
 import { Gemini } from "./repository/gemini";
+import aiRoutes from "./routes/ai";
 
 const port = process.env.PORT || 3001;
 const app = new Hono();
@@ -28,6 +29,7 @@ app.use(
 app.route("/api/auth", authRoutes);
 app.route("/api/interview", interviewRoutes);
 app.route("/api/job", jobRoutes);
+app.route("/api/ai", aiRoutes);
 console.log(`server is running on http://localhost:${port}`);
 
 Bun.serve({

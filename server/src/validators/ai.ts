@@ -1,10 +1,10 @@
-import { messageSchema } from "../schema/ai";
+import { uiMessagesSchema } from "../schema/ai";
 import { errorResponse } from "../utils/utils";
 import { zValidator } from "@hono/zod-validator";
 
 export const sendMessageValidator = zValidator(
    "json",
-   messageSchema,
+   uiMessagesSchema,
    (result, c) => {
       if (!result.success) {
          const errorMessages = result.error.issues

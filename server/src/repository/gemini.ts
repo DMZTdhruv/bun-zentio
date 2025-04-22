@@ -1,12 +1,17 @@
-import type { GenerateLeetCodeQuestionsWithGeminiSchema } from "../schema/ai";
+import type {
+   GenerateLeetCodeQuestionsWithGeminiSchema,
+   Message,
+   UiMessagesSchema,
+} from "../schema/ai";
 import {
    createInterviewLeetCodeProblemsPrompt,
    createJobPostPrompt,
 } from "../constant";
 import { questionSchema, type QuestionSchema } from "../schema/leetcode";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { generateObject } from "ai";
+import { convertToCoreMessages, generateObject, type UIMessage } from "ai";
 import { jobPostingSchema } from "../schema/job";
+import { streamText } from "ai";
 
 const geminiApiKey = process.env.GEMINI_KEY;
 if (!geminiApiKey) {
@@ -19,6 +24,9 @@ const genAi = createGoogleGenerativeAI({
 
 const jobPostingModel = genAi("gemini-2.0-flash-001");
 const leetCodeModel = genAi("gemini-2.0-flash-001");
+const chatModel = genAi("gemini-2.0-flash-001", {
+   useSearchGrounding: true,
+});
 
 export class Gemini {
    static async generateJobPostDetails(prompt: string) {
@@ -31,11 +39,15 @@ export class Gemini {
       return object;
    }
 
-   // static async sendMessage(messages: Message[]) {
-   //    const chat = chatModel.startChat({
-   //       history:,
-   //    });
-   // }
+   static async sendMessage(data: UiMessagesSchema) {
+      const { messages } = data;
+      const result = streamText({
+         model: chatModel,
+         messages: messages,
+      });
+
+      return result.toDataStreamResponse();
+   }
 
    static async generateLeetCodeQuestions({
       position,
