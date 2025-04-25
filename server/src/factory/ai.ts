@@ -1,5 +1,5 @@
 import { createFactory } from "hono/factory";
-import { sendMessageValidator } from "../validators/ai";
+import { sendCopilotMessage, sendMessageValidator } from "../validators/ai";
 import { authenticatedAuthToken } from "../middleware/auth";
 import { Ai } from "../services/ai";
 
@@ -10,8 +10,17 @@ export const sendMessageHandler = factory.createHandlers(
    sendMessageValidator,
    async (c) => {
       const data = c.req.valid("json");
-      const user = c.get("auth_user");
       //@ts-ignore
-      return Ai.sendMessage(data, user.id);
+      return Ai.sendMessage(data);
+   },
+);
+
+export const copilotHandler = factory.createHandlers(
+   authenticatedAuthToken,
+   sendCopilotMessage,
+   async (c) => {
+      const data = c.req.valid("json");
+      const res = await Ai.copilotGenerate(data);
+      return c.json(res);
    },
 );

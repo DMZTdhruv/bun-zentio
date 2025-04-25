@@ -4,6 +4,7 @@ import {
   addJobPost,
   deleteJobPost,
   getJobPosts,
+  setCommunityJobPost,
   setJobPosts,
 } from "~/store/job-post";
 
@@ -48,7 +49,11 @@ export const getCommunityJobPost = async () => {
     .get<SuccessResponse<JobPostSchema[]>>("job/idk", {
       withCredentials: true,
     })
-    .then((res) => res.data.data ?? []);
+    .then((res) => {
+      const data = res.data.data ?? [];
+      setCommunityJobPost(data);
+      return data;
+    });
 };
 
 export const deleteJobPostAction = async (id: string) =>

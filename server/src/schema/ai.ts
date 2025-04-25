@@ -39,7 +39,13 @@ export const uiMessagesSchema = z.object({
    system: z.string().optional(),
 });
 
+export const copilotSchema = z.object({
+   prompt: z.string(),
+   system: z.string(),
+});
+
 export type UiMessagesSchema = z.infer<typeof uIMessageSchema>;
+export type CopilotSchema = z.infer<typeof copilotSchema>;
 export const messagesSchema = z.array(messageSchema);
 
 export type GenerateLeetCodeQuestionsWithGeminiSchema = z.infer<

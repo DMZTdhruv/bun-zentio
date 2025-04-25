@@ -1,10 +1,10 @@
 "use client";
-import { ArrowUp, Bot, Plus, User } from "lucide-react";
+import { ArrowUp, Bot, User } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { Button } from "../ui/button";
 import { useChat } from "@ai-sdk/react";
-import ReactMarkdown from "react-markdown";
+import { MarkdownRenderer } from "./markdown-renderer";
 
 export default function AiPanel() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ export default function AiPanel() {
 
   return (
     <div className="bg-job-card relative col-span-3 flex w-full flex-col rounded-md p-2">
-      <header className="absolute top-0 left-0 flex w-full items-center gap-1 rounded-md rounded-b-none border-b border-neutral-500 bg-neutral-900/50 px-2 py-2 text-sm backdrop-blur-xl">
+      <header className="absolute top-0 left-0 z-50 flex w-full items-center gap-1 rounded-md rounded-b-none border-b border-neutral-500 bg-neutral-900/50 px-2 py-2 text-sm backdrop-blur-xl">
         <span className="inline-block w-full text-center font-semibold">
           Zentio Ai
         </span>
@@ -45,7 +45,6 @@ export default function AiPanel() {
               <p className="text-sm leading-[1.2] text-balance text-neutral-400">
                 Assistant answers questions, refines code, and makes precise
                 edits. Ideal for quick iterations, debugging, and hands-on
-                tasks.
               </p>
             </div>
           </div>
@@ -58,8 +57,8 @@ export default function AiPanel() {
                     <div className="rounded-sm bg-neutral-600 p-1">
                       <Bot size={14} />
                     </div>
-                    <div className="rounded bg-neutral-800 px-2 py-1 text-sm text-white">
-                      <ReactMarkdown>{data.content}</ReactMarkdown>
+                    <div className="max-w-[320px] rounded bg-neutral-800 px-2 text-sm text-white">
+                      <MarkdownRenderer content={data.content} />
                     </div>
                   </div>
                 </div>

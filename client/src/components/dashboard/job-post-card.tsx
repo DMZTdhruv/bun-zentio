@@ -6,13 +6,13 @@ import JobPostBadge from "./job-post-badge";
 import { motion } from "motion/react";
 
 const JobPostCard = (props: JobPostSchema) => {
-  const { job_type, position, title, company, location, id, job_posting } =
-    props;
-  const tags = [job_type, position, job_posting.company.salary];
-
-  const jobLocation = location ? location : job_posting.company.location;
-  tags.push(jobLocation);
-
+  const { job_type, position, title, company, id, job_posting } = props;
+  const tags = [
+    job_type,
+    position,
+    job_posting.company.salary,
+    job_posting.company.location,
+  ];
   const [, setJobPostId] = useQueryState("job-post");
   return (
     <motion.div
@@ -26,7 +26,7 @@ const JobPostCard = (props: JobPostSchema) => {
         onClick={() => {
           setJobPostId(id);
         }}
-      ></button>
+      />
       <div className="flex h-full flex-col justify-between">
         <div className="flex flex-col">
           <h3 className="text-2xl font-semibold">{title}</h3>

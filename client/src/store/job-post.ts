@@ -36,5 +36,7 @@ export const setJobPosts = _useJobPostStore.getState().setJobPosts;
 export const addJobPost = _useJobPostStore.getState().addJobPost;
 export const deleteJobPost = _useJobPostStore.getState().deleteJobPost;
 export const getJobPosts = () => _useJobPostStore.getState().jobPosts;
+export const setCommunityJobPost =
+  _useJobPostStore.getState().setCommunityJobPost;
 
 export const useJobPosts = createSelectors(_useJobPostStore);

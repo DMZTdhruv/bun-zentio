@@ -1,6 +1,6 @@
 {
-  "id": "e78d7a7f-daec-4848-9c7c-968e81e95eb9",
-  "prevId": "84d81334-5678-479b-b76a-be46ca8825f0",
+  "id": "7e48b926-463b-4a31-8129-19dfe6c71e06",
+  "prevId": "830a5249-693a-4e17-92f2-123a03a2c145",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -174,7 +174,7 @@
           "name": "location",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'sf'"
         },
         "public": {
@@ -233,6 +233,138 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "interview_chat.interview_chat": {
+      "name": "interview_chat",
+      "schema": "interview_chat",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "interview_id": {
+          "name": "interview_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "interview_chat_interview_id_job_interview_id_fk": {
+          "name": "interview_chat_interview_id_job_interview_id_fk",
+          "tableFrom": "interview_chat",
+          "tableTo": "job_interview",
+          "columnsFrom": [
+            "interview_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "interview_chat_created_by_users_id_fk": {
+          "name": "interview_chat_created_by_users_id_fk",
+          "tableFrom": "interview_chat",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "interview_messages.interview_messages": {
+      "name": "interview_messages",
+      "schema": "interview_messages",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sender": {
+          "name": "sender",
+          "type": "sender",
+          "typeSchema": "interview_messages",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -381,7 +513,7 @@
           "name": "problem_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "type": {
           "name": "type",
@@ -448,7 +580,7 @@
           "name": "constraint_section_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "content": {
           "name": "content",
@@ -508,7 +640,7 @@
           "name": "problem_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "type": {
           "name": "type",
@@ -753,6 +885,375 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "interview_solution_feedback_schema.interview_solution_feedback": {
+      "name": "interview_solution_feedback",
+      "schema": "interview_solution_feedback_schema",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "strengths": {
+          "name": "strengths",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "weaknesses": {
+          "name": "weaknesses",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "interview_solution_schema.interview_solution": {
+      "name": "interview_solution",
+      "schema": "interview_solution_schema",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "solution": {
+          "name": "solution",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "problem_index": {
+          "name": "problem_index",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "problem_id": {
+          "name": "problem_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "interview_id": {
+          "name": "interview_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "submitted_by": {
+          "name": "submitted_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "validation_score": {
+          "name": "validation_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quality_score": {
+          "name": "quality_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "feedback": {
+          "name": "feedback",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "interview_solution_problem_id_problem_id_fk": {
+          "name": "interview_solution_problem_id_problem_id_fk",
+          "tableFrom": "interview_solution",
+          "tableTo": "problem",
+          "columnsFrom": [
+            "problem_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "interview_solution_interview_id_job_interview_id_fk": {
+          "name": "interview_solution_interview_id_job_interview_id_fk",
+          "tableFrom": "interview_solution",
+          "tableTo": "job_interview",
+          "columnsFrom": [
+            "interview_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "interview_solution_submitted_by_users_id_fk": {
+          "name": "interview_solution_submitted_by_users_id_fk",
+          "tableFrom": "interview_solution",
+          "tableTo": "users",
+          "columnsFrom": [
+            "submitted_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "interview_solution_feedback_interview_solution_feedback_id_fk": {
+          "name": "interview_solution_feedback_interview_solution_feedback_id_fk",
+          "tableFrom": "interview_solution",
+          "tableTo": "interview_solution_feedback",
+          "schemaTo": "interview_solution_feedback_schema",
+          "columnsFrom": [
+            "feedback"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "interview_submission_feedback_schema.interview_submission_feedback": {
+      "name": "interview_submission_feedback",
+      "schema": "interview_submission_feedback_schema",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "strengths": {
+          "name": "strengths",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "weaknesses": {
+          "name": "weaknesses",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "interview_submission_report_schema.interview_submission_report": {
+      "name": "interview_submission_report",
+      "schema": "interview_submission_report_schema",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "problems_solved_score": {
+          "name": "problems_solved_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "time_score": {
+          "name": "time_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "validation_score": {
+          "name": "validation_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quality_score": {
+          "name": "quality_score",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "job_post_id": {
+          "name": "job_post_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "feedback": {
+          "name": "feedback",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "interview_submission_report_job_post_id_job_posts_id_fk": {
+          "name": "interview_submission_report_job_post_id_job_posts_id_fk",
+          "tableFrom": "interview_submission_report",
+          "tableTo": "job_posts",
+          "columnsFrom": [
+            "job_post_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "interview_submission_report_created_by_users_id_fk": {
+          "name": "interview_submission_report_created_by_users_id_fk",
+          "tableFrom": "interview_submission_report",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "interview_submission_report_feedback_interview_submission_feedback_id_fk": {
+          "name": "interview_submission_report_feedback_interview_submission_feedback_id_fk",
+          "tableFrom": "interview_submission_report",
+          "tableTo": "interview_submission_feedback",
+          "schemaTo": "interview_submission_feedback_schema",
+          "columnsFrom": [
+            "feedback"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.users": {
       "name": "users",
       "schema": "",
@@ -827,8 +1328,25 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
-  "schemas": {},
+  "enums": {
+    "interview_messages.sender": {
+      "name": "sender",
+      "schema": "interview_messages",
+      "values": [
+        "user",
+        "model",
+        "assistant"
+      ]
+    }
+  },
+  "schemas": {
+    "interview_chat": "interview_chat",
+    "interview_messages": "interview_messages",
+    "interview_solution_feedback_schema": "interview_solution_feedback_schema",
+    "interview_solution_schema": "interview_solution_schema",
+    "interview_submission_feedback_schema": "interview_submission_feedback_schema",
+    "interview_submission_report_schema": "interview_submission_report_schema"
+  },
   "sequences": {},
   "roles": {},
   "policies": {},

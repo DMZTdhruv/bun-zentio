@@ -6,12 +6,10 @@ import { motion } from "motion/react";
 import { useQueryState } from "nuqs";
 import { InterviewZentioEditor } from "../editor/pl-editor";
 import { useNoteStore } from "~/store/note";
-import { useMemo } from "react";
 
 const PlaygroundNotesPanel = ({ id }: { id: string }) => {
   const [noteId, setNoteId] = useQueryState("note");
-  const { interviewNoteContent } = useNoteStore();
-  const editorContent = useMemo(() => interviewNoteContent[id], [id]);
+  const interviewNoteContent = useNoteStore.getState().interviewNoteContent[id];
   return (
     <AnimatePresence>
       {noteId && (
@@ -47,7 +45,7 @@ const PlaygroundNotesPanel = ({ id }: { id: string }) => {
               />
             </button>
 
-            <InterviewZentioEditor id={id} value={editorContent} />
+            <InterviewZentioEditor id={id} value={interviewNoteContent} />
           </motion.div>
         </>
       )}

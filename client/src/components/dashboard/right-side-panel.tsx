@@ -8,7 +8,7 @@ import {
 } from "~/components/ui/card";
 import { motion, AnimatePresence } from "motion/react";
 import { _useJobPostStore } from "~/store/job-post";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { useQueryState } from "nuqs";
 import { JobPostingSchema } from "~/schema/job";
 import { Separator } from "../ui/separator";
@@ -16,20 +16,23 @@ import { ScrollArea } from "../ui/scroll-area";
 import JobPostBadge from "./job-post-badge";
 import { PanelRight } from "lucide-react";
 import { _useAuthStore } from "~/store/user";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteJobPostAction } from "~/actions/job";
 import { toast } from "sonner";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useSolutionStore } from "~/store/solution";
+import { getInterviewReport } from "~/actions/submission";
+import Link from "next/link";
 
 const RightSidePanel = () => {
   const jobPosts = _useJobPostStore((state) => state.jobPosts);
+  const communityJobPost = _useJobPostStore((state) => state.communityJobPosts);
+  console.log(communityJobPost);
   const [jobPostId, setJobPostId] = useQueryState("job-post");
-  const selectedJob = jobPosts.find((jobPost) => jobPost.id === jobPostId);
+  const selectedJob = [...communityJobPost, ...jobPosts].find(
+    (jobPost) => jobPost.id === jobPostId,
+  );
   const pathName = usePathname();
-  console.log({
-    selectedJob,
-    jobPosts,
-  });
 
   return (
     <>
@@ -95,8 +98,20 @@ const JobPostingDetails = ({
   jobPostId: string | null;
 }) => {
   const userId = _useAuthStore.getState().user.id;
-  const navigate = useRouter();
   const userJobPost = created_by === userId;
+  const solutionIndex = useSolutionStore(
+    (state) => state.interviewSolutionIndex,
+  );
+  const questionIndex = solutionIndex[jobPostId];
+  console.log(solutionIndex);
+
+  const { data: reportData } = useQuery({
+    queryKey: ["interivew-report"],
+    queryFn: () => {
+      return getInterviewReport({ jobPostId });
+    },
+  });
+
   return (
     <ScrollArea className="h-dvh max-h-screen">
       <Card className="mt-[50px] rounded-none border-none bg-transparent px-2 py-6 shadow-none">
@@ -122,15 +137,27 @@ const JobPostingDetails = ({
             <p className="text-neutral-400">{data.description}</p>
             <div className="mt-4 space-y-4">
               <Separator />
-              <div className="space-x-2">
-                <Button
-                  className="text-lg font-semibold"
-                  onClick={() => navigate.push(`/playground/${jobPostId}`)}
-                >
-                  Start now
-                </Button>
-                {userJobPost && jobPostId && <DeleteButton id={jobPostId} />}
-              </div>
+              {reportData ? (
+                <div className="space-x-2">
+                  <Link
+                    href={`/interview-report/${jobPostId}`}
+                    className={`${buttonVariants.apply("default")} text-lg font-semibold`}
+                  >
+                    Interview Report
+                  </Link>
+                  {userJobPost && jobPostId && <DeleteButton id={jobPostId} />}
+                </div>
+              ) : (
+                <div className="space-x-2">
+                  <Link
+                    href={`/playground/${jobPostId}${questionIndex ? `?q=${questionIndex}` : ``}`}
+                    className={`${buttonVariants.apply("default")} text-lg font-semibold`}
+                  >
+                    Start now
+                  </Link>
+                  {userJobPost && jobPostId && <DeleteButton id={jobPostId} />}
+                </div>
+              )}
             </div>
           </div>
           <JobPostSection

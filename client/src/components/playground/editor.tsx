@@ -1,6 +1,4 @@
-"use client";
-
-import { TerminalIcon } from "lucide-react";
+import { File, TerminalIcon } from "lucide-react";
 
 import {
   Select,
@@ -97,70 +95,36 @@ import "ace-builds/src-min-noconflict/snippets/php";
 import "ace-builds/src-min-noconflict/snippets/vbscript";
 import "ace-builds/src-min-noconflict/snippets/nim";
 // ========================
-import "ace-builds/src-min-noconflict/theme-tomorrow_night_eighties";
-import "ace-builds/src-min-noconflict/theme-tomorrow_night_bright";
-import "ace-builds/src-min-noconflict/theme-tomorrow_night_blue";
-import "ace-builds/src-min-noconflict/theme-tomorrow_night";
-import "ace-builds/src-min-noconflict/theme-tomorrow";
-import "ace-builds/src-min-noconflict/theme-textmate";
-import "ace-builds/src-min-noconflict/theme-terminal";
-import "ace-builds/src-min-noconflict/theme-sqlserver";
-import "ace-builds/src-min-noconflict/theme-solarized_light";
-import "ace-builds/src-min-noconflict/theme-solarized_dark";
-import "ace-builds/src-min-noconflict/theme-pastel_on_dark";
-import "ace-builds/src-min-noconflict/theme-one_dark";
-import "ace-builds/src-min-noconflict/theme-nord_dark";
-import "ace-builds/src-min-noconflict/theme-monokai";
-import "ace-builds/src-min-noconflict/theme-mono_industrial";
-import "ace-builds/src-min-noconflict/theme-merbivore_soft";
-import "ace-builds/src-min-noconflict/theme-merbivore";
-import "ace-builds/src-min-noconflict/theme-kuroir";
-import "ace-builds/src-min-noconflict/theme-kr_theme";
-import "ace-builds/src-min-noconflict/theme-katzenmilch";
-import "ace-builds/src-min-noconflict/theme-iplastic";
-import "ace-builds/src-min-noconflict/theme-idle_fingers";
-import "ace-builds/src-min-noconflict/theme-gruvbox_light_hard";
-import "ace-builds/src-min-noconflict/theme-gruvbox_dark_hard";
-import "ace-builds/src-min-noconflict/theme-gruvbox";
-import "ace-builds/src-min-noconflict/theme-gob";
-import "ace-builds/src-min-noconflict/theme-github_light_default";
-import "ace-builds/src-min-noconflict/theme-github_dark";
-import "ace-builds/src-min-noconflict/theme-github";
-import "ace-builds/src-min-noconflict/theme-eclipse";
-import "ace-builds/src-min-noconflict/theme-dreamweaver";
-import "ace-builds/src-min-noconflict/theme-dracula";
-import "ace-builds/src-min-noconflict/theme-dawn";
-import "ace-builds/src-min-noconflict/theme-crimson_editor";
-import "ace-builds/src-min-noconflict/theme-cobalt";
-import "ace-builds/src-min-noconflict/theme-clouds_midnight";
-import "ace-builds/src-min-noconflict/theme-clouds";
-import "ace-builds/src-min-noconflict/theme-cloud_editor_dark";
-import "ace-builds/src-min-noconflict/theme-cloud_editor";
-import "ace-builds/src-min-noconflict/theme-cloud9_night_low_color";
-import "ace-builds/src-min-noconflict/theme-cloud9_night";
-import "ace-builds/src-min-noconflict/theme-cloud9_day";
-import "ace-builds/src-min-noconflict/theme-chrome";
-import "ace-builds/src-min-noconflict/theme-chaos";
-import "ace-builds/src-min-noconflict/theme-ambiance";
 import "ace-builds/src-min-noconflict/theme-twilight";
 import { LangaugeSchema } from "~/schema/language";
 import { useEffect, useRef, useState } from "react";
 import { languages } from "~/config/language";
 import { handleToggleSidebar } from "~/store/sidebar";
+import { updateInterviewRound, useSolutionStore } from "~/store/solution";
+import { useQueryState } from "nuqs";
 
-const PlaygroundEditor = () => {
-  const [mode, setMode] = useState<LangaugeSchema>(languages[0]);
+const PlaygroundEditor = ({ id }: { id: string }) => {
+  const [mode, setMode] = useState<LangaugeSchema>(languages[1]);
   const editorRef = useRef<Ace.Editor | null>(null);
-  const [selectedId, setSelectedId] = useState<string>("0");
+  const [selectedId, setSelectedId] = useState<string>("1");
+  const [q] = useQueryState("q", { defaultValue: "0" });
+  const code = useSolutionStore.getState().interviewRound;
+  const [editorContent, setEditorContent] = useState<string>("");
   const handleSelectLanguage = (languageId: number) => {
     const language = languages[languageId];
     setSelectedId(String(languageId));
     setMode(language);
   };
 
+  const handleCodeChange = (code: string) => {
+    const currentIndex = String(q ?? 0);
+    updateInterviewRound(id, currentIndex, code);
+  };
+
   const handleEditorOnLoad = (editor: Ace.Editor) => {
-    editorRef.current = editor;
-    editor.session.setValue(mode.content);
+    const interview = code[id];
+    const editorCode = interview ? (interview[q] ?? "") : "";
+    setEditorContent(editorCode);
     editor.getSession().setMode(`ace/mode/${mode.mode}`);
   };
 
@@ -174,12 +138,18 @@ const PlaygroundEditor = () => {
     editorRef.current.getSession().setMode(`ace/mode/${mode.mode}`);
   }, [mode]);
 
+  useEffect(() => {
+    const interview = code[id];
+    const editorCode = interview ? (interview[q] ?? "") : "";
+    setEditorContent(editorCode);
+  }, [q]);
+
   return (
-    <section className="bg-job-card flex h-[64%] flex-col overflow-hidden rounded-md">
-      <header className="flex items-center justify-between bg-neutral-800 px-2 py-1 capitalize">
+    <section className="bg-job-card flex h-[74%] flex-col overflow-hidden rounded-md">
+      <header className="flex items-center justify-between bg-neutral-800 px-2 text-xs capitalize">
         <div className="flex items-center gap-2">
-          <TerminalIcon size={16} strokeWidth={3} />
-          <span className="font-semibold">{mode.mode}</span>
+          <File size={16} strokeWidth={3} />
+          <span className="text-sm font-medium capitalize">{mode.mode}</span>
         </div>
         <Select
           value={selectedId}
@@ -187,7 +157,7 @@ const PlaygroundEditor = () => {
             handleSelectLanguage(parseInt(value));
           }}
         >
-          <SelectTrigger className="">
+          <SelectTrigger className="text-sm capitalize">
             <SelectValue placeholder="Select a language" />
           </SelectTrigger>
           <SelectContent>
@@ -205,23 +175,29 @@ const PlaygroundEditor = () => {
       </header>
       <div className="flex-1">
         <AceEditor
-          mode={languages[0].mode}
-          fontSize={16}
+          mode={languages[1].mode}
+          fontSize={14}
           theme="twilight"
+          value={editorContent}
           onLoad={handleEditorOnLoad}
           style={{
             height: "100%",
             width: "100%",
             borderEndEndRadius: "4px",
           }}
+          onChange={(code) => {
+            console.log("code from the onChange", code);
+            setEditorContent(code);
+            handleCodeChange(code);
+          }}
           setOptions={{
-            wrap: true,
+            wrap: false,
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true,
             enableSnippets: true,
-            enableMobileMenu: true,
+            enableMobileMenu: false,
             showLineNumbers: true,
-            tabSize: 2,
+            tabSize: 4,
           }}
         />
       </div>
@@ -232,5 +208,17 @@ const PlaygroundEditor = () => {
 export default PlaygroundEditor;
 
 export const PlaygroundJudge = () => {
-  return <section className="bg-job-card flex-1 rounded-md border"></section>;
+  return (
+    <section className="bg-job-card flex-1 rounded-md border">
+      <header className="flex items-center justify-between bg-neutral-800 px-2 py-2 text-xs capitalize">
+        <div className="flex items-center gap-2">
+          <TerminalIcon size={16} strokeWidth={3} />
+          <span className="font-semibold">Terminal</span>
+        </div>
+      </header>
+      <div className="p-2">
+        zentio/client [dev] <br /> {">"}
+      </div>
+    </section>
+  );
 };

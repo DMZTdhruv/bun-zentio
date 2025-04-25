@@ -11,6 +11,7 @@ const QuestionPanel = ({ id }: { id: string }) => {
     queryKey: ["user-job-posts", id],
     queryFn: ({ queryKey }) => getJobInterview({ id: queryKey[1] }),
   });
+
   const [q] = useQueryState("q", { defaultValue: "0" });
   const currentIndex = parseInt(q || "0");
 
@@ -38,6 +39,7 @@ const QuestionPanel = ({ id }: { id: string }) => {
   }
 
   const problemsData = data.find((data) => data.type === "problems")!;
+  console.log(problemsData);
   if (!problemsData) {
     return (
       <div className="col-span-3 flex h-[calc(100dvh-76px)] w-full items-center justify-center">

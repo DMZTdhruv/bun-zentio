@@ -1,0 +1,2 @@
+ALTER TABLE "interview_submission_report_schema"."interview_submission_report" ALTER COLUMN "job_post_id" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "interview_submission_report_schema"."interview_submission_report" ALTER COLUMN "created_by" SET NOT NULL;

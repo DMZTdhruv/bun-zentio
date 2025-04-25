@@ -2,9 +2,16 @@ import { create } from "zustand";
 import { createSelectors } from "./selector";
 
 interface NoteStore {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   globalNoteContent: any[] | null;
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   interviewNoteContent: Record<string, any[]> | null;
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   setGlobalNoteContent: (content: any[]) => void;
+
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   setInterviewNoteContent: (id: string, content: any[]) => void;
 }
 

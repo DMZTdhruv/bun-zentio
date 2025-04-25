@@ -1,0 +1,4 @@
+ALTER TABLE "interview_submission_report_schema"."interview_submission_report" ADD COLUMN "job_post_id" uuid;--> statement-breakpoint
+ALTER TABLE "interview_submission_report_schema"."interview_submission_report" ADD COLUMN "created_by" uuid;--> statement-breakpoint
+ALTER TABLE "interview_submission_report_schema"."interview_submission_report" ADD CONSTRAINT "interview_submission_report_job_post_id_job_posts_id_fk" FOREIGN KEY ("job_post_id") REFERENCES "public"."job_posts"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "interview_submission_report_schema"."interview_submission_report" ADD CONSTRAINT "interview_submission_report_created_by_users_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
