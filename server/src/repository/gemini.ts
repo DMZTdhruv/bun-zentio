@@ -115,6 +115,7 @@ export class Gemini {
    > {
       console.log("\n\ngenerating LeetCode questions....");
 
+      // use old prompt later after demo submission/production
       const prompt = `Generate 3 leet code question for the level ${position}.`;
       const { object } = await generateObject({
          model: leetCodeModel,

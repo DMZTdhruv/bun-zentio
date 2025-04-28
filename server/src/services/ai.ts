@@ -123,7 +123,7 @@ ${JSON.stringify(weaknessesList)}
             .returning()
       )[0];
       console.log(response);
-      return response.id;
+      return response.job_post_id;
    }
 }
 

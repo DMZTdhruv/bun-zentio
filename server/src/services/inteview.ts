@@ -1,9 +1,10 @@
-import type { InferSelectModel } from "drizzle-orm";
+import { eq, type InferSelectModel } from "drizzle-orm";
 import { UserRepo } from "../repository/auth";
 import { InterviewRepo } from "../repository/interview";
 import { ZentioError } from "../utils/utils";
 import type { JobPostCreation } from "../schema/job";
-import type { JobPost } from "../db/schema/job.sql";
+import { JobPost } from "../db/schema/job.sql";
+import { db } from "../db";
 
 type Model = InferSelectModel<typeof JobPost>;
 
@@ -17,6 +18,32 @@ export const createJobPostService = async (
    }
 
    const res = await InterviewRepo.createAiMockInterviewJobPost(userId, data);
+   if (!res) {
+      throw new ZentioError(`failed to create job post`, 400);
+   }
+
+   return res;
+};
+
+export const createReJobPostService = async (
+   userId: string,
+   data: { jobPostId: string; weakness: string },
+): Promise<Model> => {
+   const userExists = await UserRepo.getUserById(userId);
+   if (!userExists) {
+      throw new ZentioError(`no account registered with this email`, 404);
+   }
+   const jobPost = (
+      await db.select().from(JobPost).where(eq(JobPost.id, data.jobPostId))
+   )[0];
+
+   const res = await InterviewRepo.createAiMockInterviewJobPost(userId, {
+      description: jobPost.description,
+      job_type: jobPost.job_type,
+      public: jobPost.public,
+      position: jobPost.position,
+   });
+
    if (!res) {
       throw new ZentioError(`failed to create job post`, 400);
    }

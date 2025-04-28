@@ -1,6 +1,9 @@
 import { createFactory } from "hono/factory";
 import { authenticatedAuthToken } from "../middleware/auth";
-import { createJobPostValidator } from "../validators/interview";
+import {
+   createJobPostValidator,
+   createReJobPostValidator,
+} from "../validators/interview";
 import { errorResponse, successResponse, ZentioError } from "../utils/utils";
 import {
    createJobPostService,
@@ -9,6 +12,7 @@ import {
    getCommunityJobPostsService,
    getUserJobPostsService,
    getJobPostByTitleService,
+   createReJobPostService,
 } from "../services/inteview";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
@@ -203,5 +207,22 @@ export const getJobPostByIdHandler = factory.createHandlers(
             message: "internal server error",
          });
       }
+   },
+);
+
+export const createReJobPostHandler = factory.createHandlers(
+   createReJobPostValidator,
+   authenticatedAuthToken,
+   async (c) => {
+      const user = c.get("auth_user");
+      const data = c.req.valid("json");
+
+      const res = await createReJobPostService(user.id, data);
+      return successResponse({
+         c,
+         message: "successfully created an ai mock interview job post",
+         data: res,
+         statusCode: 201,
+      });
    },
 );
